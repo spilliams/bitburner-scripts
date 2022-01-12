@@ -92,6 +92,7 @@ function cmpUnhackable(a, b) {
 
 /** @param {NS} ns **/
 function printServers(ns, list, qty, printFunc) {
+  qty = Math.min(qty, list.length);
   for (let i = 0; i < qty; i++) {
     printFunc(ns, list[i]);
   }
