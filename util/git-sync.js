@@ -3,7 +3,7 @@ export async function main(ns) {
   const baseURL = "https://raw.githubusercontent.com/spilliams/bitburner-scripts/main";
   const files = [
     "/contracts/algorithmicStockTrader.js",
-    "/contracts/subarrayWithmaximumSum.js",
+    "/contracts/subarrayWithMaximumSum.js",
     "/contracts/totalWaysToSum.js",
     "/notes/bootstrap.txt",
     "/util/formatMoney.js",
