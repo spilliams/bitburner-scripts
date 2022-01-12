@@ -1,0 +1,31 @@
+/** @param {NS} ns **/
+export async function main(ns) {
+  let max = algorithmicStockTrader3(ns, ns.args);
+  ns.tprintf("max profit is %d", max);
+}
+
+/** @param {NS} ns **/
+export function algorithmicStockTrader3(ns, data) {
+  let maxProfit = 0;
+  for (let startOne = 0; startOne < data.length - 1; startOne++) {
+    for (let endOne = startOne + 1; endOne < data.length; endOne++) {
+      const firstProfit = data[endOne] - data[startOne];
+
+      let trans = ns.sprintf("buy day %d, sell day %d = %d", startOne, endOne, firstProfit);
+      // can we fit a second transaction?
+      let secondProfit = 0;
+      for (let startTwo = endOne + 1; startTwo < data.length - 1; startTwo++) {
+        for (let endTwo = startTwo + 1; endTwo < data.legnth; endTwo++) {
+          secondProfit = Math.max(secondProfit, data[endTwo] - data[startTwo]);
+          trans = ns.sprintf("buy day %d, sell day %d, buy day %d, sell day %d = %d", startOne, endOne, startTwo, endTwo, firstProfit + secondProfit);
+        }
+      }
+
+      maxProfit = Math.max(maxProfit, firstProfit + secondProfit);
+      if (maxProfit == firstProfit + secondProfit) {
+        ns.tprintf("%s", trans);
+      }
+    }
+  }
+  return maxProfit;
+}
