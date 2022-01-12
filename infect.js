@@ -1,3 +1,5 @@
+import { scanAll } from "util/recurse.js";
+
 // opens up the current host.
 // scans the local network.
 // for every connection on it, copies this script to it, runs it.
@@ -30,42 +32,6 @@ export async function main(ns) {
     sumThreads += await takeIt(ns, host, payload, args);
   }
   ns.tprintf("Started %d threads on %d servers", sumThreads, sumTargets);
-}
-
-/** @param {NS} ns **/
-/** @return A list of hostnames */
-function scanAll(ns) {
-  let scanning = ["home"];
-  let scannedAll = false;
-
-  // each scanning target is checked against the queued list
-  // for a scanning target not in the queued list, that target
-  // is added to the queued list, and that target is scanning
-  // itself (with its scans added to the scanning list)
-  while (!scannedAll) {
-    const originalLength = scanning.length;
-    let i = 0;
-    while (i < originalLength) {
-      const root = scanning[i];
-      const leaves = ns.scan(root);
-      for (let j = 0; j < leaves.length; j++) {
-        const leaf = leaves[j]
-        if (!scanning.includes(leaf)) {
-          scanning.push(leaf);
-        }
-      }
-      i++;
-    }
-
-    if (originalLength == scanning.length) {
-      scannedAll = true;
-      // } else {
-      // 	ns.tprint("going around again");
-      // 	ns.tprint(scanning);
-    }
-  }
-
-  return scanning;
 }
 
 /** @param {NS} ns **/

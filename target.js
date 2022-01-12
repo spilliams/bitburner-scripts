@@ -1,39 +1,12 @@
+import { scanAll } from "util/recurse.js";
+import { formatMoney } from "util/formatMoney.js";
+
 // finds reasonable targets
 
 /** @param {NS} ns **/
 export async function main(ns) {
   // funnel: scanning, queued, vetted, reach
-
-  // scanning targets are put in a list
-  let scanning = ["home"];
-  let scannedAll = false;
-
-  // each scanning target is checked against the queued list
-  // for a scanning target not in the queued list, that target
-  // is added to the queued list, and that target is scanning
-  // itself (with its scans added to the scanning list)
-  while (!scannedAll) {
-    const originalLength = scanning.length;
-    let i = 0;
-    while (i < originalLength) {
-      const root = scanning[i];
-      const leaves = ns.scan(root);
-      for (let j = 0; j < leaves.length; j++) {
-        const leaf = leaves[j]
-        if (!scanning.includes(leaf)) {
-          scanning.push(leaf);
-        }
-      }
-      i++;
-    }
-
-    if (originalLength == scanning.length) {
-      scannedAll = true;
-      // } else {
-      // 	ns.tprint("going around again");
-      // 	ns.tprint(scanning);
-    }
-  }
+  const scanning = scanAll(ns);
 
   ns.tprintf("done! scanned %d servers", scanning.length);
   // ns.tprint(scanning);
@@ -132,16 +105,4 @@ function printHackable(ns, server) {
 /** @param {NS} ns **/
 function printUnhackable(ns, server) {
   ns.tprintf("    %s (%s): needs %d skill, %d ports", server["organizationName"], server["hostname"], server["requiredHackingSkill"], server["numOpenPortsRequired"]);
-}
-
-/** @param {Number} dollars **/
-function formatMoney(dollars) {
-  const suffixes = ["", "k", "m", "b", "t", "q"];
-  let suffix = 0;
-  let left = dollars;
-  while (left > 1000) {
-    left /= 1000;
-    suffix++;
-  }
-  return "$" + left.toFixed(3) + suffixes[suffix];
 }
