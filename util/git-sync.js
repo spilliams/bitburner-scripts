@@ -1,8 +1,18 @@
 /** @param {NS} ns **/
 export async function main(ns) {
+  if (ns.args.length == 1 && ns.args[0]) {
+    await ns.wget("https://raw.githubusercontent.com/spilliams/bitburner-scripts/main/util/git-sync.js", "/util/git-sync.js");
+    await ns.exec("util/git-sync.js", "home", 10);
+  } else {
+    await downloadAll();
+  }
+}
+
+async function downloadAll() {
   const baseURL = "https://raw.githubusercontent.com/spilliams/bitburner-scripts/main";
   const files = [
     "/contracts/algorithmicStockTrader.js",
+    "/contracts/minimumPathSumTriangle.js",
     "/contracts/subarrayWithMaximumSum.js",
     "/contracts/totalWaysToSum.js",
     "/notes/bootstrap.txt",
@@ -25,12 +35,11 @@ export async function main(ns) {
     "/target.js",
     "/test.js"
   ];
+  let promises = [];
+
   for (let i = 0; i < files.length; i++) {
-    const got = await ns.wget(ns.sprintf("%s%s", baseURL, files[i]), files[i]);
-    if (got) {
-      ns.tprintf("sync'd %s", files[i]);
-    } else {
-      ns.tprintf("FAILED to sync %s", files[i]);
-    }
+    promises.push(ns.wget(ns.sprintf("%s%s", baseURL, files[i]), files[i]));
   }
+
+  return promises;
 }
