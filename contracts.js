@@ -16,15 +16,16 @@ export async function main(ns) {
   const contracts = findContracts(ns);
   ns.tprintf("Found %d contracts", contracts.length);
 
+  const goAll = await ns.prompt("Yes to run all. No to run one by one.");
   for (let i = 0; i < contracts.length; i++) {
     ns.tprintf("\n\n");
     ns.tprintf("vvvvvvvvvvvvvvvvvvvvvv");
     solveContract(ns, contracts[i]);
     ns.tprintf("^^^^^^^^^^^^^^^^^^^^^^");
-    const another = await ns.prompt("Yes to continue");
-    if (!another) {
-      break;
-    }
+
+    if (goAll) continue;
+    const another = await ns.prompt("Yes to do another. No to cancel.");
+    if (!another) break;
   }
 }
 
@@ -34,26 +35,36 @@ function solveContract(ns, contract) {
   ns.tprintf("type: %s", contract.type);
 
   // const solver = getSolver(ns, contract);
+  let solver;
   switch (contract.type) {
     case "Algorithmic Stock Trader I":
-      return algorithmicStockTrader1;
+      solver = algorithmicStockTrader1;
+      break;
     case "Algorithmic Stock Trader III":
-      return algorithmicStockTrader3;
+      solver = algorithmicStockTrader3;
+      break;
     case "Minimum Path Sum in a Triangle":
-      return minimumPathSumTriangle;
+      solver = minimumPathSumTriangle;
+      break;
     case "Subarray with Maximum Sum":
-      return subarrayWithMaximumSum;
+      solver = subarrayWithMaximumSum;
+      break;
     case "Total Ways to Sum":
-      return totalWaysToSum;
+      solver = totalWaysToSum;
+      break;
 
     // case "Algorithmic Stock Trader IV":
-    // 	return algorithmicStockTrader4;
+    // 	solver = algorithmicStockTrader4;
+    //  break;
     // case "Array Jumping Game":
-    // 	return arrayJumpingGame;
+    // 	solver = arrayJumpingGame;
+    //  break;
     // case "Merge Overlapping Intervals":
-    // 	return mergeOverlappingIntervals;
+    // 	solver = mergeOverlappingIntervals;
+    //  break;
     // case "Unique Paths in a Grid II":
-    // 	return uniquePathsGrid2;
+    // 	solver = uniquePathsGrid2;
+    //  break;
     default:
       ns.tprintf("Contract type '%s' unrecognized!", contract.type);
       printContractHelp(ns, contract);
