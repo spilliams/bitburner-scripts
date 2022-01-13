@@ -10,7 +10,7 @@
 /** @param {NS} ns **/
 export async function main(ns) {
   if (ns.args.length == 1 && ns.args[0]) {
-    const got = await ns.wget("https://raw.githubusercontent.com/spilliams/bitburner-scripts/main/util/git-sync.js", "util_git-sync.js");
+    const got = await ns.wget("https://raw.githubusercontent.com/spilliams/bitburner-scripts/main/util_git-sync.js", "util_git-sync.js");
     if (!got) {
       ns.tprintf("failed to get util/git-sync.js");
       return;
