@@ -53,50 +53,6 @@ contract data: 24 (number, -1 long)
 
 number of tries remaining: 9
 
-vvvvvvvvvvvvvvvvvvvvvv
-
-reviewing contract contract-705434.cct on host run4theh111z
-
-type: Algorithmic Stock Trader I
-
-153,83,174,89,193,32,83,200,74,145,47,8,158,30,89,10,180,88,175,120,42,150,186,2,80,133,156,176,66,108
-
-buy day 0, sell day 2 = 21
-
-buy day 0, sell day 4 = 40
-
-buy day 0, sell day 7 = 47
-
-buy day 1, sell day 2 = 91
-
-buy day 1, sell day 4 = 110
-
-buy day 1, sell day 7 = 117
-
-buy day 5, sell day 7 = 168
-
-buy day 11, sell day 16 = 172
-
-buy day 11, sell day 22 = 178
-
-proposed answer: 178
-
-Contract has 5 tries remaining! You'll have to solve it manually.
-
-contract description:
-
-You are given the following array of stock prices (which are numbers) where the i-th element represents the stock price on day i:
-
- 153,83,174,89,193,32,83,200,74,145,47,8,158,30,89,10,180,88,175,120,42,150,186,2,80,133,156,176,66,108
-
- Determine the maximum possible profit you can earn using at most one transaction (i.e. you can only buy and sell the stock once). If no profit can be made then the answer should be 0. Note that you have to buy the stock before you can sell it
-
-contract data: 153,83,174,89,193,32,83,200,74,145,47,8,158,30,89,10,180,88,175,120,42,150,186,2,80,133,156,176,66,108 (object, 30 long)
-
-number of tries remaining: 5
-
-^^^^^^^^^^^^^^^^^^^^^^
-
 
 vvvvvvvvvvvvvvvvvvvvvv
 
