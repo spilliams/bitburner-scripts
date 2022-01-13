@@ -1,5 +1,5 @@
-import { scanAll } from "util/recurse.js";
-import { formatMoney } from "util/formatMoney.js";
+import { scanAll } from "util_recurse.js";
+import { formatMoney } from "util_formatMoney.js";
 
 // finds reasonable targets
 

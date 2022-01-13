@@ -1,4 +1,4 @@
-import { formatMoney } from "util/formatMoney.js";
+import { formatMoney } from "util_formatMoney.js";
 
 // weaken/grow/hack script
 // args: target

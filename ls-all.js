@@ -1,4 +1,4 @@
-import { scanAll } from "util/recurse.js";
+import { scanAll } from "util_recurse.js";
 
 /** @param {NS} ns **/
 export async function main(ns) {

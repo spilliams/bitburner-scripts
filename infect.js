@@ -1,4 +1,4 @@
-import { scanAll } from "util/recurse.js";
+import { scanAll } from "util_recurse.js";
 
 // opens up the current host.
 // scans the local network.

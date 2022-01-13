@@ -3,6 +3,10 @@
 // runs the new copy in basic mode. Otherwise this script just updates
 // everything at once (basic mode);
 
+// wget doesn't work properly to create files in subdirectories
+// and there is no ns.mv?!
+// so all the files in this repo are in the top level.
+
 /** @param {NS} ns **/
 export async function main(ns) {
   if (ns.args.length == 1 && ns.args[0]) {
@@ -21,14 +25,14 @@ export async function main(ns) {
 async function downloadAll(ns) {
   const baseURL = "https://raw.githubusercontent.com/spilliams/bitburner-scripts/main";
   const files = [
-    "contracts/algorithmicStockTrader.js",
-    "contracts/minimumPathSumTriangle.js",
-    "contracts/subarrayWithMaximumSum.js",
-    "contracts/totalWaysToSum.js",
-    "notes/bootstrap.txt",
-    "util/formatMoney.js",
-    "util/git-sync.js",
-    "util/recurse.js",
+    "contracts_algorithmicStockTrader.js",
+    "contracts_minimumPathSumTriangle.js",
+    "contracts_subarrayWithMaximumSum.js",
+    "contracts_totalWaysToSum.js",
+    "bootstrap.txt",
+    "util_formatMoney.js",
+    "util_git-sync.js",
+    "util_recurse.js",
     "2.js",
     "backdoor.js",
     "buy-upgrade.js",
@@ -47,10 +51,7 @@ async function downloadAll(ns) {
   ];
 
   for (let i = 0; i < files.length; i++) {
-    // wget doesn't work properly to create files in subdirectories
-    // and there is no ns.mv?!
-    const name = files[i].split("/").join("_");
-    const got = await ns.wget(ns.sprintf("%s/%s", baseURL, files[i]), name);
+    const got = await ns.wget(ns.sprintf("%s/%s", baseURL, files[i]), files[i]);
     if (!got) {
       ns.tprintf("failed to download %s", files[i]);
     }

@@ -1,8 +1,8 @@
-import { algorithmicStockTrader1, algorithmicStockTrader3 } from "contracts/algorithmicStockTrader.js";
-import { minimumPathSumTriangle } from "contracts/minimumPathSumTriangle.js";
-import { subarrayWithMaximumSum } from "contracts/subarrayWithMaximumSum.js";
-import { totalWaysToSum } from "contracts/totalWaysToSum.js";
-import { scanAll } from "util/recurse.js";
+import { algorithmicStockTrader1, algorithmicStockTrader3 } from "contracts_algorithmicStockTrader.js";
+import { minimumPathSumTriangle } from "contracts_minimumPathSumTriangle.js";
+import { subarrayWithMaximumSum } from "contracts_subarrayWithMaximumSum.js";
+import { totalWaysToSum } from "contracts_totalWaysToSum.js";
+import { scanAll } from "util_recurse.js";
 
 /** @param {NS} ns **/
 export async function main(ns) {
