@@ -1,4 +1,5 @@
-import { algorithmicStockTrader3 } from "contracts/algorithmicStockTrader.js";
+import { algorithmicStockTrader1, algorithmicStockTrader3 } from "contracts/algorithmicStockTrader.js";
+import { minimumPathSumTriangle } from "contracts/minimumPathSumTriangle.js";
 import { subarrayWithMaximumSum } from "contracts/subarrayWithMaximumSum.js";
 import { totalWaysToSum } from "contracts/totalWaysToSum.js";
 import { scanAll } from "util/recurse.js";
@@ -20,6 +21,10 @@ export async function main(ns) {
     ns.tprintf("vvvvvvvvvvvvvvvvvvvvvv");
     solveContract(ns, contracts[i]);
     ns.tprintf("^^^^^^^^^^^^^^^^^^^^^^");
+    const another = await ns.prompt("Yes to continue");
+    if (!another) {
+      break;
+    }
   }
 }
 
@@ -28,7 +33,33 @@ function solveContract(ns, contract) {
   ns.tprintf("reviewing contract %s on host %s", contract.file, contract.host);
   ns.tprintf("type: %s", contract.type);
 
-  const solver = getSolver(ns, contract);
+  // const solver = getSolver(ns, contract);
+  switch (contract.type) {
+    case "Algorithmic Stock Trader I":
+      return algorithmicStockTrader1;
+    case "Algorithmic Stock Trader III":
+      return algorithmicStockTrader3;
+    case "Minimum Path Sum in a Triangle":
+      return minimumPathSumTriangle;
+    case "Subarray with Maximum Sum":
+      return subarrayWithMaximumSum;
+    case "Total Ways to Sum":
+      return totalWaysToSum;
+
+    // case "Algorithmic Stock Trader IV":
+    // 	return algorithmicStockTrader4;
+    // case "Array Jumping Game":
+    // 	return arrayJumpingGame;
+    // case "Merge Overlapping Intervals":
+    // 	return mergeOverlappingIntervals;
+    // case "Unique Paths in a Grid II":
+    // 	return uniquePathsGrid2;
+    default:
+      ns.tprintf("Contract type '%s' unrecognized!", contract.type);
+      printContractHelp(ns, contract);
+      return;
+  }
+
   let proposal;
   try {
     proposal = solver(ns, contract.data);
@@ -64,33 +95,6 @@ function solveContract(ns, contract) {
 }
 
 /** @param {NS} ns **/
-function getSolver(ns, contract) {
-  switch (contract.type) {
-    // case "Algorithmic Stock Trader III":
-    // 	return algorithmicStockTrader3;
-    // case "Subarray with Maximum Sum":
-    // 	return subarrayWithMaximumSum;
-    // case "Total Ways to Sum":
-    // 	return totalWaysToSum;
-
-    // case "Algorithmic Stock Trader IV":
-    // 	return algorithmicStockTrader4;
-    // case "Array Jumping Game":
-    // 	return arrayJumpingGame;
-    // case "Merge Overlapping Intervals":
-    // 	return mergeOverlappingIntervals;
-    // case "Minimum Path Sum in a Triangle":
-    // 	return minimumPathSumTriangle;
-    // case "Unique Paths in a Grid II":
-    // 	return uniquePathsGrid2;
-    default:
-      ns.tprintf("Contract type '%s' unrecognized!", contract.type);
-      printContractHelp(ns, contract);
-      return function (ns, data) { return false; };
-  }
-}
-
-/** @param {NS} ns **/
 function findContracts(ns) {
   const servers = scanAll(ns);
   // ns.tprintf("Scanned %d servers", servers.length);
@@ -122,6 +126,15 @@ function findContracts(ns) {
 function printContractHelp(ns, contract) {
   ns.tprintf("contract description:");
   ns.tprintf("%s", contract.description);
-  ns.tprintf("contract data: %v (%s)", contract.data, typeof contract.data);
+  let length;
+  try {
+    length = contract.data.length;
+  } catch (e) {
+    length = -1;
+  }
+  if (typeof length == "undefined") {
+    length = -1;
+  }
+  ns.tprintf("contract data: %v (%s, %d long)", contract.data, typeof contract.data, length);
   ns.tprintf("number of tries remaining: %d", contract.numTries);
 }

@@ -1,7 +1,25 @@
 /** @param {NS} ns **/
 export async function main(ns) {
-  let max = algorithmicStockTrader3(ns, ns.args);
+  // 62,40,17,163,22,105,159,50,10,140,172,157,163
+  let max = algorithmicStockTrader1(ns, [62, 40, 17, 163, 22, 105, 159, 50, 10, 140, 172, 157, 163]);
   ns.tprintf("max profit is %d", max);
+}
+
+/** @param {NS} ns **/
+export function algorithmicStockTrader1(ns, data) {
+  let maxProfit = 0;
+  for (let startOne = 0; startOne < data.length - 1; startOne++) {
+    for (let endOne = startOne + 1; endOne < data.length; endOne++) {
+      const firstProfit = data[endOne] - data[startOne];
+
+      let trans = ns.sprintf("buy day %d, sell day %d = %d", startOne, endOne, firstProfit);
+      maxProfit = Math.max(maxProfit, firstProfit);
+      if (maxProfit == firstProfit) {
+        ns.tprintf("%s", trans);
+      }
+    }
+  }
+  return maxProfit;
 }
 
 /** @param {NS} ns **/
