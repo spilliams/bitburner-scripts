@@ -1,6 +1,5 @@
 # Immediate Concerns
 
-- algorithmicStockTrader3 is broken (see contracts.txt)
 - totalWaysToSum is broken (see contracts.txt)
 - other contracts!
 - slum snakes (+4=17)

@@ -23,10 +23,10 @@ contract data: 18 (number, -1 long)
 
 number of tries remaining: 9
 
+^^^^^^^^^^^^^^^^^^^^^^
 
 
 
-================================================================================
 
 vvvvvvvvvvvvvvvvvvvvvv
 
@@ -52,82 +52,5 @@ It is possible write four as a sum in exactly four different ways:
 contract data: 24 (number, -1 long)
 
 number of tries remaining: 9
-
-
-vvvvvvvvvvvvvvvvvvvvvv
-
-reviewing contract contract-223230.cct on host nova-med
-
-type: Algorithmic Stock Trader III
-
-buy day 0, sell day 4 = 21
-
-buy day 0, sell day 15 = 21
-
-buy day 1, sell day 4 = 105
-
-buy day 1, sell day 15 = 105
-
-buy day 2, sell day 4 = 159
-
-buy day 2, sell day 15 = 159
-
-buy day 5, sell day 6 = 179
-
-buy day 5, sell day 12 = 181
-
-buy day 5, sell day 15 = 192
-
-buy day 14, sell day 15 = 193
-
-proposed answer: 193
-
-Incorrect!
-
-contract description:
-
-You are given the following array of stock prices (which are numbers) where the i-th element represents the stock price on day i:
-
- 174,90,36,90,195,3,182,80,104,121,131,78,184,31,2,195,29,148,173,65,5,36,139,11,131,14,78,51,21,83,106,164,74
-
- Determine the maximum possible profit you can earn using at most two transactions. A transaction is defined as buying and then selling one share of the stock. Note that you cannot engage in multiple transactions at once. In other words, you must sell the stock before you buy it again.
-
- If no profit can be made, then the answer should be 0
-
-contract data: 174,90,36,90,195,3,182,80,104,121,131,78,184,31,2,195,29,148,173,65,5,36,139,11,131,14,78,51,21,83,106,164,74 (object, 33 long)
-
-number of tries remaining: 9
-
-^^^^^^^^^^^^^^^^^^^^^^
-
-
-
-vvvvvvvvvvvvvvvvvvvvvv
-
-reviewing contract contract-713108.cct on host omnia
-
-type: Algorithmic Stock Trader III
-
-buy day 0, sell day 1 = 150
-
-buy day 0, sell day 2 = 176
-
-proposed answer: 176
-
-Incorrect!
-
-contract description:
-
-You are given the following array of stock prices (which are numbers) where the i-th element represents the stock price on day i:
-
- 14,164,190,24,104,183,184,27
-
- Determine the maximum possible profit you can earn using at most two transactions. A transaction is defined as buying and then selling one share of the stock. Note that you cannot engage in multiple transactions at once. In other words, you must sell the stock before you buy it again.
-
- If no profit can be made, then the answer should be 0
-
-contract data: 14,164,190,24,104,183,184,27 (object, 8 long)
-
-number of tries remaining: 8
 
 ^^^^^^^^^^^^^^^^^^^^^^
