@@ -3,6 +3,14 @@
 - algorithmicStockTrader3 is broken (see contracts.txt)
 - totalWaysToSum is broken (see contracts.txt)
 - other contracts!
+- slum snakes (+4=17)
+- tetrads (+5=22)
+- syndicate? (combat 200)
+- speakers for the dead? (combat 300)
+- the dark army? (Chongqing)
+- megacorps? I wanna get 40 queued augs...
+- other city rep & augs (another run)
+
 
 # Future Ideas
 
