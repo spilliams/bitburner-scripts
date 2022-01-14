@@ -22,10 +22,10 @@ export async function main(ns) {
   const currentHackingSkill = ns.getHackingLevel();
   for (let i = 0; i < scanning.length; i++) {
     const host = scanning[i];
-    if (host == "home" || host.includes("pserv")) {
+    const server = ns.getServer(host);
+    if (host == "home" || server["purchasedByPlayer"]) {
       continue;
     }
-    const server = ns.getServer(host);
     const hackableSkill = server["requiredHackingSkill"] <= currentHackingSkill;
     const hackablePorts = portScriptsAvailable >= server["numOpenPortsRequired"];
 
