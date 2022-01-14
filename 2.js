@@ -1,4 +1,4 @@
-import { formatMoney } from "util_formatMoney.js";
+// (remember: this is a payload. no imports)
 
 // weaken/grow/hack script
 // args: target
@@ -24,4 +24,16 @@ export async function main(ns) {
 
     await ns.hack(target);
   }
+}
+
+/** @param {Number} dollars **/
+export function formatMoney(dollars) {
+  const suffixes = ["", "k", "m", "b", "t", "q"];
+  let suffix = 0;
+  let left = dollars;
+  while (left > 1000) {
+    left /= 1000;
+    suffix++;
+  }
+  return "$" + left.toFixed(3) + suffixes[suffix];
 }
