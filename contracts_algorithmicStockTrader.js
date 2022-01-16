@@ -29,22 +29,10 @@ export function algorithmicStockTrader1(ns, data) {
 
 /** @param {NS} ns **/
 export function algorithmicStockTrader3(ns, data) {
-  // This solution looks at the problem in the following way:
-  // For this list of days, for each day, there exists a maximum amount of money
-  // I can make in a transaction on or before this day, and a maximum amount of
-  // money I can make in a transaction after this day.
-  // This solution uses a memo table to store the profits in the format
-  // table[r][c] = the profit from buying on day r and selling on day c
-  // (this is transposed in memoTx)
-  // maximizing along a row or column will give us "the most we could make if we
-  // buy/sell on day N". From there it's a matter of making sure the max for
-  // selling the first transaction on or before day N is added to the max for
-  // buying the second transaction after day N.
   const l = data.length;
   let memo = empty2D(l);
   let memoTx = empty2D(l);
 
-  // build the memo table
   for (let buyOn = 0; buyOn < l; buyOn++) {
     let line = "";
     for (let sellOn = 0; sellOn < l; sellOn++) {
@@ -104,6 +92,11 @@ export function algorithmicStockTrader3(ns, data) {
 
   ns.tprintf([line0, line1, line2, line3, line4, line5].join("\n"));
   return Math.max(...sumOfMaxes);
+}
+
+/** @param {NS} ns **/
+export function algorithmicStockTrader2(ns, data) {
+
 }
 
 function empty2D(l) {

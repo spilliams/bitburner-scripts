@@ -184,3 +184,29 @@ contract data: 73326956,37 (object, 2 long)
 number of tries remaining: 10
 
 ^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+vvvvvvvvvvvvvvvvvvvvvv
+
+reviewing contract contract-669105-Volhaven.cct on host univ-energy
+
+type: Algorithmic Stock Trader II
+
+Contract type 'Algorithmic Stock Trader II' unrecognized!
+
+contract description:
+
+You are given the following array of stock prices (which are numbers) where the i-th element represents the stock price on day i:
+
+ 56,61,163,68,141,8,80,109,168,60,118,166,23,116,51,91,186,112,67,102
+
+ Determine the maximum possible profit you can earn using as many transactions as you'd like. A transaction is defined as buying and then selling one share of the stock. Note that you cannot engage in multiple transactions at once. In other words, you must sell the stock before you buy it again.
+
+ If no profit can be made, then the answer should be 0
+
+contract data: 56,61,163,68,141,8,80,109,168,60,118,166,23,116,51,91,186,112,67,102 (object, 20 long)
+
+number of tries remaining: 10
+
+^^^^^^^^^^^^^^^^^^^^^^
