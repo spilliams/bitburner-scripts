@@ -21,11 +21,16 @@ export async function main(ns) {
   }
 
   let servers = ns.getPurchasedServers();
+  let fullyUpgraded = 0;
 
   let j = 0;
-  while (true) {
-    await upgradeServer(ns, servers[j], payload, target);
+  while (fullyUpgraded < servers.length) {
+    ns.print(ns.sprintf("upgrading server %s...", servers[j]));
+    const upgraded = await upgradeServer(ns, servers[j], payload, target);
+    if (!upgraded) fullyUpgraded++;
+    ns.print("done");
     j = (j + 1) % servers.length;
+    await ns.sleep(1000);
   }
 }
 
@@ -53,6 +58,10 @@ async function buyServer(ns, hostname, payload, target) {
 async function upgradeServer(ns, hostname, payload, target) {
   let currentRAM = ns.getServerMaxRam(hostname);
   let newRAM = currentRAM * 2;
+  // validate that newRAM is a power of 2...
+  if (newRAM > ns.getPurchasedServerMaxRam()) {
+    return false;
+  }
   let cost = ns.getPurchasedServerCost(newRAM);
   while (ns.getServerMoneyAvailable("home") < cost) {
     await ns.sleep(30000);
@@ -64,4 +73,6 @@ async function upgradeServer(ns, hostname, payload, target) {
   await ns.scp(payload, hostname);
   let threads = ((newRAM / ns.getScriptRam(payload)) * 10) / 10;
   ns.exec(payload, hostname, threads, target);
+
+  return true
 }
