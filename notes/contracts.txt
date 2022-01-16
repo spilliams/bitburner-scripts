@@ -12,10 +12,10 @@ contract description:
 
 It is possible write four as a sum in exactly four different ways:
 
- &nbsp;&nbsp;&nbsp;&nbsp;3 + 1
- &nbsp;&nbsp;&nbsp;&nbsp;2 + 2
- &nbsp;&nbsp;&nbsp;&nbsp;2 + 1 + 1
- &nbsp;&nbsp;&nbsp;&nbsp;1 + 1 + 1 + 1
+     3 + 1
+     2 + 2
+     2 + 1 + 1
+     1 + 1 + 1 + 1
 
  How many different ways can the number 18 be written as a sum of at least two positive integers?
 
@@ -42,15 +42,145 @@ contract description:
 
 It is possible write four as a sum in exactly four different ways:
 
- &nbsp;&nbsp;&nbsp;&nbsp;3 + 1
- &nbsp;&nbsp;&nbsp;&nbsp;2 + 2
- &nbsp;&nbsp;&nbsp;&nbsp;2 + 1 + 1
- &nbsp;&nbsp;&nbsp;&nbsp;1 + 1 + 1 + 1
+     3 + 1
+     2 + 2
+     2 + 1 + 1
+     1 + 1 + 1 + 1
 
  How many different ways can the number 24 be written as a sum of at least two positive integers?
 
 contract data: 24 (number, -1 long)
 
 number of tries remaining: 9
+
+^^^^^^^^^^^^^^^^^^^^^^
+
+
+vvvvvvvvvvvvvvvvvvvvvv
+
+reviewing contract contract-888700-KuaiGongInternational.cct on host summit-uni
+
+type: Sanitize Parentheses in Expression
+
+Contract type 'Sanitize Parentheses in Expression' unrecognized!
+
+contract description:
+
+Given the following string:
+
+  ()a)a()))((
+
+  remove the minimum number of invalid parentheses in order to validate the string. If there are multiple minimal ways to validate the string, provide all of the possible results. The answer should be provided as an array of strings. If it is impossible to validate the string the result should be an array with only an empty string.
+
+  IMPORTANT: The string may contain letters, not just parentheses. Examples:
+  "()())()" -> [()()(), (())()]
+  "(a)())()" -> [(a)()(), (a())()]
+  ")( -> [""]
+
+contract data: ()a)a()))(( (string, 11 long)
+
+number of tries remaining: 10
+
+^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+vvvvvvvvvvvvvvvvvvvvvv
+
+reviewing contract contract-19482.cct on host aerocorp
+
+type: Merge Overlapping Intervals
+
+Contract type 'Merge Overlapping Intervals' unrecognized!
+
+contract description:
+
+Given the following array of array of numbers representing a list of intervals, merge all overlapping intervals.
+
+  [[8,11],[11,12],[25,30],[10,13],[13,21],[25,30]]
+
+  Example:
+
+  [[1, 3], [8, 10], [2, 6], [10, 16]]
+   x=x
+   |||    x=x
+   |x===x |||
+   |||||| ||x=====x
+   1----6 8------16
+
+  would merge into [[1, 6], [8, 16]].
+
+  The intervals must be returned in ASCENDING order. You can assume that in an interval, the first number will always be smaller than the second.
+
+contract data: 8,11,11,12,25,30,10,13,13,21,25,30 (object, 6 long)
+
+number of tries remaining: 15
+
+^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+vvvvvvvvvvvvvvvvvvvvvv
+
+reviewing contract contract-291101.cct on host icarus
+
+type: Unique Paths in a Grid II
+
+Contract type 'Unique Paths in a Grid II' unrecognized!
+
+contract description:
+
+You are located in the top-left corner of the following grid:
+
+  0,0,0,0,0,0,
+  0,0,0,0,1,0,
+  0,0,0,0,0,0,
+  0,0,0,1,0,0,
+
+  You are trying reach the bottom-right corner of the grid, but you can only move down or right on each step. Furthermore, there are obstacles on the grid that you cannot move onto. These obstacles are denoted by '1', while empty spaces are denoted by 0.
+
+  Determine how many unique paths there are from start to finish.
+
+  NOTE: The data returned for this contract is an 2D array of numbers representing the grid.
+
+contract data: 0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0 (object, 4 long)
+
+number of tries remaining: 10
+
+^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+vvvvvvvvvvvvvvvvvvvvvv
+
+reviewing contract contract-360605-Daedalus.cct on host zb-def
+
+type: Find All Valid Math Expressions
+
+Contract type 'Find All Valid Math Expressions' unrecognized!
+
+contract description:
+
+You are given the following string which contains only digits between 0 and 9:
+
+  73326956
+
+  You are also given a target number of 37. Return all possible ways you can add the +, -, and * operators to the string such that it evaluates to the target number.
+
+  The provided answer should be an array of strings containing the valid expressions. The data provided by this problem is an array with two elements. The first element is the string of digits, while the second element is the target number:
+
+  ["73326956", 37]
+
+  NOTE: Numbers in the expression cannot have leading 0's. In other words, "1+01" is not a valid expression Examples:
+
+  Input: digits = "123", target = 6
+  Output: [1+2+3, 1*2*3]
+
+  Input: digits = "105", target = 5
+  Output: [1*0+5, 10-5]
+
+contract data: 73326956,37 (object, 2 long)
+
+number of tries remaining: 10
 
 ^^^^^^^^^^^^^^^^^^^^^^
