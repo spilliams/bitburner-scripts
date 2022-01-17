@@ -1,4 +1,5 @@
 import { algorithmicStockTrader1, algorithmicStockTrader3 } from "contracts_algorithmicStockTrader.js";
+import { generateIPAddresses } from "contracts_generateIPAddresses.js";
 import { minimumPathSumTriangle } from "contracts_minimumPathSumTriangle.js";
 import { subarrayWithMaximumSum } from "contracts_subarrayWithMaximumSum.js";
 import { totalWaysToSum } from "contracts_totalWaysToSum.js";
@@ -6,23 +7,21 @@ import { scanAll } from "util_recurse.js";
 
 /** @param {NS} ns **/
 export async function main(ns) {
-  if (ns.args.length > 0) {
-    ns.tprintf("Args supplied! Testing mode");
-    // const numWays = solveTotalWaysToSum(ns, ns.args[0]);
-    // ns.tprintf("%d unique ways to sum to %d", numWays, ns.args[0]);
-    return;
-  }
-
   const contracts = findContracts(ns);
   ns.tprintf("Found %d contracts", contracts.length);
+
+  if (contracts.length == 0) {
+    return;
+  }
 
   const goAll = await ns.prompt("Yes to run all. No to run one by one.");
   for (let i = 0; i < contracts.length; i++) {
     ns.tprintf("\n\n");
     ns.tprintf("vvvvvvvvvvvvvvvvvvvvvv");
-    solveContract(ns, contracts[i]);
+    let keepGoing = solveContract(ns, contracts[i]);
     ns.tprintf("^^^^^^^^^^^^^^^^^^^^^^");
 
+    if (!keepGoing) break;
     if (goAll) continue;
     const another = await ns.prompt("Yes to do another. No to cancel.");
     if (!another) break;
@@ -30,6 +29,7 @@ export async function main(ns) {
 }
 
 /** @param {NS} ns **/
+/** @returns Whether or not the caller should keep solving contracts */
 function solveContract(ns, contract) {
   ns.tprintf("reviewing contract %s on host %s", contract.file, contract.host);
   ns.tprintf("type: %s", contract.type);
@@ -43,15 +43,18 @@ function solveContract(ns, contract) {
     case "Algorithmic Stock Trader III":
       solver = algorithmicStockTrader3;
       break;
+    case "Generate IP Addresses":
+      solver = generateIPAddresses;
+      break;
     case "Minimum Path Sum in a Triangle":
       solver = minimumPathSumTriangle;
       break;
     case "Subarray with Maximum Sum":
       solver = subarrayWithMaximumSum;
       break;
-    case "Total Ways to Sum":
-      solver = totalWaysToSum;
-      break;
+    // case "Total Ways to Sum":
+    //   solver = totalWaysToSum;
+    //   break;
 
     // case "Algorithmic Stock Trader IV":
     // 	solver = algorithmicStockTrader4;
@@ -68,7 +71,7 @@ function solveContract(ns, contract) {
     default:
       ns.tprintf("Contract type '%s' unrecognized!", contract.type);
       printContractHelp(ns, contract);
-      return;
+      return true;
   }
 
   let proposal;
@@ -77,7 +80,7 @@ function solveContract(ns, contract) {
   } catch (e) {
     ns.tprintf("caught exception from solver: %v", e);
     printContractHelp(ns, contract);
-    return;
+    return false;
   }
 
   ns.tprintf("proposed answer: %v", proposal);
@@ -85,13 +88,13 @@ function solveContract(ns, contract) {
   if (proposal === false) {
     ns.tprintf("Proposal returned false. Please return a proposal in order to attempt the contract automatically.");
     printContractHelp(ns, contract);
-    return;
+    return true;
   }
 
   if (contract.numTries <= 5) {
     ns.tprintf("Contract has %d tries remaining! You'll have to solve it manually.", contract.numTries);
     printContractHelp(ns, contract);
-    return;
+    return true;
   }
 
   const reward = ns.codingcontract.attempt(proposal, contract.file, contract.host, { "returnReward": true });
@@ -99,10 +102,11 @@ function solveContract(ns, contract) {
     ns.tprintf("Incorrect!");
     contract.numTries--;
     printContractHelp(ns, contract);
-    return;
+    return false;
   }
 
   ns.tprintf("Correct! Reward: %s", reward);
+  return true;
 }
 
 /** @param {NS} ns **/
