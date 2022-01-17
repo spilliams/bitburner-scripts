@@ -22,53 +22,6 @@ number of tries remaining: 10
 
 
 vvvvvvvvvvvvvvvvvvvvvv
-reviewing contract contract-157323.cct on host vitalife
-type: Spiralize Matrix
-Contract type 'Spiralize Matrix' unrecognized!
-contract description:
-
-Given the following array of arrays of numbers representing a 2D matrix, return the elements of the matrix as an array in spiral order:
-
-&nbsp;&nbsp;&nbsp;&nbsp;[
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[50,43,19, 5,46,11,29,35]
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ 4,35,16,16, 6,46, 4,49]
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[24,23,13,23,34,17,45,25]
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[15,11,26,43,47,49,10,15]
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[28,40,38, 5,10,33,11,46]
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ 1,13,17,27,45,37, 9, 2]
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[27,38, 6,45,38,15,47,23]
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[20,11,15,48,23, 1,25,25]
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ 4,44,13,15,28,10,39,24]
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[47,38,19,31, 5,27,31,32]
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[43,41,11,33,10,28,45,29]
-&nbsp;&nbsp;&nbsp;&nbsp;]
-
-Here is an example of what spiral order should be:
-
- &nbsp;&nbsp;&nbsp;&nbsp;[
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1, 2, 3]
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4, 5, 6]
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[7, 8, 9]
- &nbsp;&nbsp;&nbsp;&nbsp;]
-
- Answer: [1, 2, 3, 6, 9, 8 ,7, 4, 5]
-
- Note that the matrix will not always be square:
-
- &nbsp;&nbsp;&nbsp;&nbsp;[
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1,&nbsp;&nbsp;2,&nbsp;&nbsp;3,&nbsp;&nbsp;4]
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[5,&nbsp;&nbsp;6,&nbsp;&nbsp;7,&nbsp;&nbsp;8]
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[9,&nbsp;10,&nbsp;11,&nbsp;12]
- &nbsp;&nbsp;&nbsp;&nbsp;]
-
- Answer: [1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7]
-
-contract data: 50,43,19,5,46,11,29,35,4,35,16,16,6,46,4,49,24,23,13,23,34,17,45,25,15,11,26,43,47,49,10,15,28,40,38,5,10,33,11,46,1,13,17,27,45,37,9,2,27,38,6,45,38,15,47,23,20,11,15,48,23,1,25,25,4,44,13,15,28,10,39,24,47,38,19,31,5,27,31,32,43,41,11,33,10,28,45,29 (object, 11 long)
-number of tries remaining: 10
-^^^^^^^^^^^^^^^^^^^^^^
-
-
-vvvvvvvvvvvvvvvvvvvvvv
 reviewing contract contract-381088.cct on host .
 type: Find Largest Prime Factor
 Contract type 'Find Largest Prime Factor' unrecognized!

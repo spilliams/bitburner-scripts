@@ -2,6 +2,7 @@ import { algorithmicStockTrader1, algorithmicStockTrader3 } from "contracts_algo
 import { generateIPAddresses } from "contracts_generateIPAddresses.js";
 import { mergeOverlappingIntervals } from "contracts_mergeOverlappingIntervals.js";
 import { minimumPathSumTriangle } from "contracts_minimumPathSumTriangle.js";
+import { spiralizeMatrix } from "contracts_spiralizeMatrix.js";
 import { subarrayWithMaximumSum } from "contracts_subarrayWithMaximumSum.js";
 import { totalWaysToSum } from "contracts_totalWaysToSum.js";
 import { scanAll } from "util_recurse.js";
@@ -52,6 +53,9 @@ function solveContract(ns, contract) {
       break;
     case "Minimum Path Sum in a Triangle":
       solver = minimumPathSumTriangle;
+      break;
+    case "Spiralize Matrix":
+      solver = spiralizeMatrix;
       break;
     case "Subarray with Maximum Sum":
       solver = subarrayWithMaximumSum;
