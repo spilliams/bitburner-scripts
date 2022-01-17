@@ -1,4 +1,5 @@
 import { algorithmicStockTrader1, algorithmicStockTrader3 } from "contracts_algorithmicStockTrader.js";
+import { findAllValidMathExpressions } from "contracts_findAllValidMathExpressions.js";
 import { generateIPAddresses } from "contracts_generateIPAddresses.js";
 import { mergeOverlappingIntervals } from "contracts_mergeOverlappingIntervals.js";
 import { minimumPathSumTriangle } from "contracts_minimumPathSumTriangle.js";
@@ -6,6 +7,11 @@ import { spiralizeMatrix } from "contracts_spiralizeMatrix.js";
 import { subarrayWithMaximumSum } from "contracts_subarrayWithMaximumSum.js";
 import { totalWaysToSum } from "contracts_totalWaysToSum.js";
 import { scanAll } from "util_recurse.js";
+
+// If the number of attempts is <= this number, we won't submit our proposed answer
+const attemptsThreshold = 3;
+
+const exitOnFail = false;
 
 /** @param {NS} ns **/
 export async function main(ns) {
@@ -16,22 +22,35 @@ export async function main(ns) {
     return;
   }
 
+  let numWon = 0;
+  let numPassed = 0;
+  let numFailed = 0;
   const goAll = await ns.prompt("Yes to run all. No to run one by one.");
   for (let i = 0; i < contracts.length; i++) {
     ns.tprintf("\n\n");
     ns.tprintf("vvvvvvvvvvvvvvvvvvvvvv");
-    let keepGoing = solveContract(ns, contracts[i]);
+    let score = solveContract(ns, contracts[i]);
     ns.tprintf("^^^^^^^^^^^^^^^^^^^^^^");
 
-    if (!keepGoing) break;
+    if (score == 1) numWon++;
+    else if (score == 0) numPassed++;
+    else if (score == -1) {
+      numFailed++;
+      if (exitOnFail) break;
+    } else {
+      ns.tprintf("bad solver exit code: %v. See above logs", score);
+      break;
+    }
+
     if (goAll) continue;
     const another = await ns.prompt("Yes to do another. No to cancel.");
     if (!another) break;
   }
+  ns.tprintf("%d won, %d passed, %d failed", numWon, numPassed, numFailed)
 }
 
 /** @param {NS} ns **/
-/** @returns Whether or not the caller should keep solving contracts */
+/** @returns 1 if the contract was solved successfully, 0 if the contract was not attempted, -1 if the contract was attempted and failed, -2 if there was a bigger problem */
 function solveContract(ns, contract) {
   ns.tprintf("reviewing contract %s on host %s", contract.file, contract.host);
   ns.tprintf("type: %s", contract.type);
@@ -44,6 +63,9 @@ function solveContract(ns, contract) {
       break;
     case "Algorithmic Stock Trader III":
       solver = algorithmicStockTrader3;
+      break;
+    case "Find All Valid Math Expressions":
+      solver = findAllValidMathExpressions;
       break;
     case "Generate IP Addresses":
       solver = generateIPAddresses;
@@ -79,7 +101,7 @@ function solveContract(ns, contract) {
     default:
       ns.tprintf("Contract type '%s' unrecognized!", contract.type);
       printContractHelp(ns, contract);
-      return true;
+      return 0;
   }
 
   let proposal;
@@ -88,7 +110,7 @@ function solveContract(ns, contract) {
   } catch (e) {
     ns.tprintf("caught exception from solver: %v", e);
     printContractHelp(ns, contract);
-    return false;
+    return -2;
   }
 
   ns.tprintf("proposed answer: %v", proposal);
@@ -96,13 +118,13 @@ function solveContract(ns, contract) {
   if (proposal === false) {
     ns.tprintf("Proposal returned false. Please return a proposal in order to attempt the contract automatically.");
     printContractHelp(ns, contract);
-    return true;
+    return 0;
   }
 
-  if (contract.numTries <= 5) {
+  if (contract.numTries <= attemptsThreshold) {
     ns.tprintf("Contract has %d tries remaining! You'll have to solve it manually.", contract.numTries);
     printContractHelp(ns, contract);
-    return true;
+    return 0;
   }
 
   const reward = ns.codingcontract.attempt(proposal, contract.file, contract.host, { "returnReward": true });
@@ -110,11 +132,11 @@ function solveContract(ns, contract) {
     ns.tprintf("Incorrect!");
     contract.numTries--;
     printContractHelp(ns, contract);
-    return false;
+    return -1;
   }
 
   ns.tprintf("Correct! Reward: %s", reward);
-  return true;
+  return 1;
 }
 
 /** @param {NS} ns **/
