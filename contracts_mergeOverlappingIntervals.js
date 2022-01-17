@@ -19,15 +19,19 @@ export function mergeOverlappingIntervals(ns, data) {
   // construct an empty array, with extra space
   let merged = [];
   for (let i = 0; i < length + 2; i++) {
-    merged.push(0);
+    merged.push("0");
+    merged.push(" ");
   }
+  merged.push("0");
 
   // for each interval, fill in the merged array
-  ns.tprintf("           01234567890123456789012345678901234567890")
+  ns.tprintf("             0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0")
   for (let i = 0; i < data.length; i++) {
     const interval = data[i];
-    for (let j = interval[0]; j <= interval[1]; j++) {
-      merged[j] = 1;
+    const mergeStart = (interval[0] + 1) * 2;
+    const mergeEnd = (interval[1] + 1) * 2;
+    for (let j = mergeStart; j <= mergeEnd; j++) {
+      merged[j] = "1";
     }
     ns.tprintf("+[%s,%s] = %s", pad(interval[0], 2), pad(interval[1], 2), merged.join(""));
   }
@@ -38,13 +42,13 @@ export function mergeOverlappingIntervals(ns, data) {
   for (let i = 1; i < mergeStr.length; i++) {
     const prev = mergeStr[i - 1];
     const cursor = mergeStr[i];
-    if (prev == "0" && cursor == "1") {
+    if (cursor == "1" && (prev == "0" || prev == " ")) {
       risingIndex = i - 1;
       continue;
     }
-    if (prev == "1" && cursor == "0") {
+    if (prev == "1" && (cursor == "0" || cursor == " ")) {
       let fallingIndex = i - 2;
-      intervals.push([risingIndex, fallingIndex]);
+      intervals.push([(risingIndex / 2) - 1, (fallingIndex / 2) - 1]);
     }
   }
   return intervals;
