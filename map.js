@@ -1,11 +1,5 @@
 /** @param {NS} ns **/
 export async function main(ns) {
-  // if (ns.args.length != 1) {
-  //     ns.tprint("requires 1 arg: hostname to trace");
-  //     return;
-  // }
-
-  // const needle = ns.args[0];
   const reverseTree = buildTree(ns);
   const leaves = Object.keys(reverseTree);
   leaves.sort();
@@ -21,20 +15,6 @@ export async function main(ns) {
       ns.tprintf(`"%s" -> "%s"`, sources[j], leaf);
     }
   }
-
-  // const trace = [needle];
-
-  // let last = trace[trace.length-1];
-  // let limit = 20;
-  // while (limit > 0 && last != "home") {
-  // 	trace.push[reverseTree[last][0]];
-  // 	last = trace[trace.length-1];
-  // 	limit--;
-  // }
-
-  // trace.reverse();
-
-  // ns.tprintf("%s", trace.join(" -> "));
 }
 
 /** @param {NS} ns **/
@@ -67,13 +47,9 @@ function buildTree(ns) {
 
     if (originalLength == scanning.length) {
       scannedAll = true;
-      // } else {
-      // 	ns.tprint("going around again");
-      // 	ns.tprint(scanning);
     }
   }
 
   ns.tprintf("done! scanned %d servers", scanning.length);
-  // ns.tprint(scanning);
   return reverseTree;
 }
