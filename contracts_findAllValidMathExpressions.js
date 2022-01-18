@@ -31,29 +31,20 @@ export function findAllValidMathExpressions(ns, data) {
   const digits = data[0].split('')
   const operators = ['+', '-', '*', '']
   let expressions = []
+  const stripLeadingZero = (e) => e.endsWith('0') ? e.slice(0, -1) : e
   for (let i = 0; i < digits.length; i++) {
     const digit = digits[i]
     if (i === 0) {
       expressions = expressions.concat(
-        //first number can be negative
         [digit, '-' + digit]
           .flatMap(d => operators.map(op => d + op))
-          //remove leading zeroes
           .filter(d => d !== '0' && d !== '-0')
       )
     } else if (i === digits.length - 1) {
-      expressions = expressions.map(e => e + digit)
+      expressions = expressions.map(stripLeadingZero).map(e => e + digit)
     } else {
-      expressions = expressions.flatMap(e =>
-        operators.map(op => {
-          let exp = e
-          //remove leading zeroes
-          if (e.endsWith('0')) {
-            exp = e.slice(0, -1)
-          }
-          return exp + digit + op
-        })
-      )
+      expressions = expressions.map(stripLeadingZero)
+        .flatMap(e => operators.map(op => e + digit + op))
     }
   }
   return expressions.filter(e => eval(e) === data[1])
