@@ -7,7 +7,7 @@ import { minimumPathSumTriangle } from "contracts_minimumPathSumTriangle.js";
 import { spiralizeMatrix } from "contracts_spiralizeMatrix.js";
 import { subarrayWithMaximumSum } from "contracts_subarrayWithMaximumSum.js";
 // import { totalWaysToSum } from "contracts_totalWaysToSum.js";
-import { uniquePathsInAGrid1 } from "contracts_uniquePathsInAGrid.js";
+import { uniquePathsInAGrid1, uniquePathsInAGrid2 } from "contracts_uniquePathsInAGrid.js";
 import { scanAll } from "util_recurse.js";
 
 // If the number of attempts is <= this number, we won't submit our proposed answer
@@ -105,6 +105,9 @@ function solveContract(ns, contract) {
     //   break;
     case "Unique Paths in a Grid I":
       solver = uniquePathsInAGrid1;
+      break;
+    case "Unique Paths in a Grid II":
+      solver = uniquePathsInAGrid2;
       break;
 
     // case "Algorithmic Stock Trader IV":

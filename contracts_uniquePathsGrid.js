@@ -1,6 +1,16 @@
 /** @param {NS} ns **/
 export async function main(ns) {
-  ns.tprintf("%d paths", uniquePathsInAGrid1(ns, [5, 11]));
+  // ns.tprintf("%d paths", uniquePathsInAGrid1(ns, [5, 11]));
+
+  ns.tprintf("%d paths", uniquePathsInAGrid2(ns, [
+    [0, 0, 0, 0, 0, 1],
+    [0, 0, 0, 0, 0, 0],
+    [0, 1, 0, 1, 0, 0],
+    [0, 0, 0, 0, 0, 1],
+    [0, 0, 0, 1, 1, 1],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 1, 0]
+  ]));
 }
 
 export function uniquePathsInAGrid1(ns, data) {
@@ -40,12 +50,56 @@ export function uniquePathsInAGrid1(ns, data) {
   return max;
 }
 
-// export function uniquePathsInAGrid2(ns, data, x = 0, y = 0) {
-//   const targetX = data[0].length - 1;
-//   const targetY = data.length - 1;
+export function uniquePathsInAGrid2(ns, data) {
+  const rows = data.length;
+  const cols = data[0].length;
 
+  ns.tprintf("original grid:\n%s", sprintGrid(data));
 
-// }
+  // change 0s to blanks
+  // change 1s to 0s
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (data[r][c] === 0) data[r][c] = "";
+      if (data[r][c] === 1) data[r][c] = 0;
+      if (r == 0 || c == 0) data[r][c] = 1;
+    }
+  }
+  data[0][0] = 0;
+
+  ns.tprintf("after cleaning:\n%s", sprintGrid(data));
+
+  // now count em!
+  for (let r = 1; r < rows; r++) {
+    for (let c = 1; c < cols; c++) {
+      if (data[r][c] === 0) continue;
+      data[r][c] = parseInt(data[r - 1][c] + data[r][c - 1]);
+    }
+  }
+  ns.tprintf("final grid:\n%s", sprintGrid(data));
+
+  return data[rows - 1][cols - 1];
+}
+
+function sprintGrid(data) {
+  const rows = data.length;
+  const cols = data[0].length;
+  const max = data[rows - 1][cols - 1];
+  let padLength = ("" + max).length + 1;
+  padLength = Math.max(2, padLength + 1);
+
+  let lines = [];
+
+  for (let r = 0; r < rows; r++) {
+    let rowS = "";
+    for (let c = 0; c < cols; c++) {
+      rowS += pad(data[r][c], padLength);
+    }
+    lines.push(rowS);
+  }
+
+  return lines.join("\n");
+}
 
 function pad(num, len, char = " ") {
   let str = "" + num;
