@@ -1,4 +1,5 @@
 import { algorithmicStockTrader1, algorithmicStockTrader3 } from "contracts_algorithmicStockTrader.js";
+import { arrayJumpingGame } from "contracts_arrayJumpingGame.js";
 // import { findAllValidMathExpressions } from "contracts_findAllValidMathExpressions.js";
 import { generateIPAddresses } from "contracts_generateIPAddresses.js";
 import { mergeOverlappingIntervals } from "contracts_mergeOverlappingIntervals.js";
@@ -76,6 +77,9 @@ function solveContract(ns, contract) {
       break;
     case "Algorithmic Stock Trader III":
       solver = algorithmicStockTrader3;
+      break;
+    case "Array Jumping Game":
+      solver = arrayJumpingGame;
       break;
     // case "Find All Valid Math Expressions":
     //   solver = findAllValidMathExpressions;
