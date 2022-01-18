@@ -1,15 +1,8 @@
-
-
-
-
 vvvvvvvvvvvvvvvvvvvvvv
 
 reviewing contract contract-197685.cct on host joesguns
-
 type: Sanitize Parentheses in Expression
-
 Contract type 'Sanitize Parentheses in Expression' unrecognized!
-
 contract description:
 
 Given the following string:
@@ -24,9 +17,7 @@ Given the following string:
  ")( -> [""]
 
 contract data: )a)()(((())a (string, 12 long)
-
 number of tries remaining: 10
-
 ^^^^^^^^^^^^^^^^^^^^^^
 
 
@@ -34,13 +25,9 @@ number of tries remaining: 10
 
 
 vvvvvvvvvvvvvvvvvvvvvv
-
 reviewing contract contract-735337.cct on host catalyst
-
 type: Algorithmic Stock Trader II
-
 Contract type 'Algorithmic Stock Trader II' unrecognized!
-
 contract description:
 
 You are given the following array of stock prices (which are numbers) where the i-th element represents the stock price on day i:
@@ -52,9 +39,7 @@ You are given the following array of stock prices (which are numbers) where the 
  If no profit can be made, then the answer should be 0
 
 contract data: 6,61,92,56,46 (object, 5 long)
-
 number of tries remaining: 10
-
 ^^^^^^^^^^^^^^^^^^^^^^
 
 
@@ -62,37 +47,9 @@ number of tries remaining: 10
 
 
 vvvvvvvvvvvvvvvvvvvvvv
-
-reviewing contract contract-112235-CyberSec.cct on host millenium-fitness
-
-type: Unique Paths in a Grid I
-
-Contract type 'Unique Paths in a Grid I' unrecognized!
-
-contract description:
-
-You are in a grid with 5 rows and 11 columns, and you are positioned in the top-left corner of that grid. You are trying to reach the bottom-right corner of the grid, but you can only move down or right on each step. Determine how many unique paths there are from start to finish.
-
- NOTE: The data returned for this contract is an array with the number of rows and columns:
-
- [5, 11]
-
-contract data: 5,11 (object, 2 long)
-
-number of tries remaining: 10
-
-^^^^^^^^^^^^^^^^^^^^^^
-
-
-
-vvvvvvvvvvvvvvvvvvvvvv
-
 reviewing contract contract-377290.cct on host defcomm
-
 type: Total Ways to Sum
-
 Contract type 'Total Ways to Sum' unrecognized!
-
 contract description:
 
 It is possible write four as a sum in exactly four different ways:
@@ -105,26 +62,20 @@ It is possible write four as a sum in exactly four different ways:
  How many different ways can the number 94 be written as a sum of at least two positive integers?
 
 contract data: 94 (number, -1 long)
-
 number of tries remaining: 10
-
 ^^^^^^^^^^^^^^^^^^^^^^
 
 
 
 vvvvvvvvvvvvvvvvvvvvvv
-
 reviewing contract contract-871422-CyberSec.cct on host zeus-med
-
 type: Unique Paths in a Grid II
-
 Contract type 'Unique Paths in a Grid II' unrecognized!
-
 contract description:
 
 You are located in the top-left corner of the following grid:
 
- 0,0,0,0,0,1,
+0,0,0,0,0,1,
 0,0,0,0,0,0,
 0,1,0,1,0,0,
 0,0,0,0,0,1,
@@ -139,26 +90,20 @@ You are located in the top-left corner of the following grid:
  NOTE: The data returned for this contract is an 2D array of numbers representing the grid.
 
 contract data: 0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0 (object, 7 long)
-
 number of tries remaining: 10
-
 ^^^^^^^^^^^^^^^^^^^^^^
 
 
 
 vvvvvvvvvvvvvvvvvvvvvv
-
 reviewing contract contract-343286-FourSigma.cct on host run4theh111z
-
 type: Unique Paths in a Grid II
-
 Contract type 'Unique Paths in a Grid II' unrecognized!
-
 contract description:
 
 You are located in the top-left corner of the following grid:
 
- 0,0,0,0,0,0,1,0,0,0,1,
+0,0,0,0,0,0,1,0,0,0,1,
 0,1,0,0,0,0,0,0,0,0,0,
 0,0,0,1,1,0,0,0,1,0,0,
 0,0,0,0,0,0,0,0,0,0,0,
@@ -176,41 +121,29 @@ You are located in the top-left corner of the following grid:
  NOTE: The data returned for this contract is an 2D array of numbers representing the grid.
 
 contract data: 0,0,0,0,0,0,1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0 (object, 10 long)
-
 number of tries remaining: 10
-
 ^^^^^^^^^^^^^^^^^^^^^^
 
 
 
 vvvvvvvvvvvvvvvvvvvvvv
-
 reviewing contract contract-381088.cct on host .
-
 type: Find Largest Prime Factor
-
 Contract type 'Find Largest Prime Factor' unrecognized!
-
 contract description:
 
 A prime factor is a factor that is a prime number. What is the largest prime factor of 27133381?
 
 contract data: 27133381 (number, -1 long)
-
 number of tries remaining: 10
-
 ^^^^^^^^^^^^^^^^^^^^^^
 
 
 
 vvvvvvvvvvvvvvvvvvvvvv
-
 reviewing contract contract-778155.cct on host 4sigma
-
 type: Algorithmic Stock Trader II
-
 Contract type 'Algorithmic Stock Trader II' unrecognized!
-
 contract description:
 
 You are given the following array of stock prices (which are numbers) where the i-th element represents the stock price on day i:
@@ -222,9 +155,7 @@ You are given the following array of stock prices (which are numbers) where the 
  If no profit can be made, then the answer should be 0
 
 contract data: 33,198,57,38,16,5,94,182,47,180,98,65,10,88,131,72,49,56,33,51,121,15,58,8,36,73,63,32,159,154,5,190,64,116,136,156,138,179,68,130,165,65,58,183,27,143,153 (object, 47 long)
-
 number of tries remaining: 10
-
 ^^^^^^^^^^^^^^^^^^^^^^
 
 
