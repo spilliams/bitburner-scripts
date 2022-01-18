@@ -1,11 +1,11 @@
 import { algorithmicStockTrader1, algorithmicStockTrader3 } from "contracts_algorithmicStockTrader.js";
-import { findAllValidMathExpressions } from "contracts_findAllValidMathExpressions.js";
+// import { findAllValidMathExpressions } from "contracts_findAllValidMathExpressions.js";
 import { generateIPAddresses } from "contracts_generateIPAddresses.js";
 import { mergeOverlappingIntervals } from "contracts_mergeOverlappingIntervals.js";
 import { minimumPathSumTriangle } from "contracts_minimumPathSumTriangle.js";
 import { spiralizeMatrix } from "contracts_spiralizeMatrix.js";
 import { subarrayWithMaximumSum } from "contracts_subarrayWithMaximumSum.js";
-import { totalWaysToSum } from "contracts_totalWaysToSum.js";
+// import { totalWaysToSum } from "contracts_totalWaysToSum.js";
 import { scanAll } from "util_recurse.js";
 
 // If the number of attempts is <= this number, we won't submit our proposed answer
@@ -46,6 +46,19 @@ export async function main(ns) {
     const another = await ns.prompt("Yes to do another. No to cancel.");
     if (!another) break;
   }
+  let contractCounts = {};
+  for (let i = 0; i < contracts.length; i++) {
+    const c = contracts[i];
+    if (typeof contractCounts[c.type] == "undefined") {
+      contractCounts[c.type] = 1;
+      continue;
+    }
+    contractCounts[c.type] = contractCounts[c.type] + 1;
+  }
+  let contractKeys = Object.keys(contractCounts).sort();
+  for (let i = 0; i < contractKeys.length; i++) {
+    ns.tprintf("%s: %d contracts seen", contractKeys[i], contractCounts[contractKeys[i]]);
+  }
   ns.tprintf("%d won, %d passed, %d failed", numWon, numPassed, numFailed)
 }
 
@@ -64,9 +77,9 @@ function solveContract(ns, contract) {
     case "Algorithmic Stock Trader III":
       solver = algorithmicStockTrader3;
       break;
-    case "Find All Valid Math Expressions":
-      solver = findAllValidMathExpressions;
-      break;
+    // case "Find All Valid Math Expressions":
+    //   solver = findAllValidMathExpressions;
+    //   break;
     case "Generate IP Addresses":
       solver = generateIPAddresses;
       break;
