@@ -1,15 +1,19 @@
 # Immediate Concerns
 
-- map out how many augmentations are left
-    if you need to reset, use the neuroflux governor
 - totalWaysToSum is broken (see contracts.txt)
-- other contracts!
-- syndicate
-- speakers for the dead? (combat 300)
-- the dark army? (go to Chongqing)
-- megacorps? I wanna get moar augmentations!
-- other city rep & augs (Chongqing, New Tokyo, Ishima, Volhaven)
+- play with [ports](https://bitburner.readthedocs.io/en/latest/netscript/
+netscriptmisc.html)
 
+# ports ideas
+
+orchestrator on home will
+
+- send messages on ports
+- start scripts on hosts? like, manage the ratios of g/w/h?
+- watch multiple targets?
+
+scripts on other servers will read a port for a command, to execute a single
+action against a single target.
 
 # Future Ideas
 
