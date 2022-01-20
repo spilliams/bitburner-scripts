@@ -1,17 +1,9 @@
-# find a target
-run target.js
-# hit the target
-run newinfect.js 2.js foodnstuff
-# update buy-upgrade.js with a new hostname prefix
-# hit the target more
-run buy-upgrade.js 2.js foodnstuff
-# hit the target more
-run 2.js -t 6800 foodnstuff
-# purchase TOR router
-# start buying up scripts
+# find targets
+# hit the best target
+# go to university to study CS
+# update which target you hit based on hacking level
+# when you reach hacking 50, stop school and do something else
 
-# for each port script bought:
-# scriptkill buy-upgrade.js
-# scriptkill 2.js
-run newinfect.js 2.js iron-gym
-run buy-upgrade.js 2.js iron-gym
+# purchase TOR router
+# start buying up port scripts
+# for each port script bought, re-infect to get more servers on board
