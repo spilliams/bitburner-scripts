@@ -55,7 +55,7 @@ export async function main(ns) {
 }
 
 /** @param {NS} ns **/
-function getNumPortScriptsAvailable(ns) {
+export function getNumPortScriptsAvailable(ns) {
   let sum = 0;
   if (ns.fileExists("BruteSSH.exe", "home")) {
     sum++;

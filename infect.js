@@ -29,13 +29,13 @@ export async function main(ns) {
       continue;
     }
     sumTargets++;
-    sumThreads += await takeIt(ns, host, payload, args);
+    sumThreads += await takeIt(ns, host, payload, true, args);
   }
   ns.tprintf("Started %d threads on %d servers", sumThreads, sumTargets);
 }
 
 /** @param {NS} ns **/
-async function breakIt(ns, target) {
+export async function breakIt(ns, target) {
   if (ns.fileExists("BruteSSH.exe", "home")) {
     ns.brutessh(target);
   }
@@ -62,16 +62,18 @@ async function breakIt(ns, target) {
 
 /** @param {NS} ns **/
 /** @return The number of threads started on the target **/
-async function takeIt(ns, host, payload, args) {
+export async function takeIt(ns, host, payload, exec = false, args = []) {
   await ns.killall(host);
   const max = ns.getServerMaxRam(host);
   const used = ns.getServerUsedRam(host);
   const avail = max - used;
   const threads = ((avail / ns.getScriptRam(payload)) * 10) / 10;
   if (threads < 1) {
-    return threads;
+    return 0;
   }
   await ns.scp(payload, "home", host);
-  ns.exec(payload, host, threads, ...args);
+  if (exec) {
+    ns.exec(payload, host, threads, ...args);
+  }
   return threads;
 }
