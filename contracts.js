@@ -25,7 +25,7 @@ export async function main(ns) {
   }
 
   let numWon = 0;
-  let numPassed = 0;
+  let numSkipped = 0;
   let numFailed = 0;
   const goAll = await ns.prompt("Yes to run all. No to run one by one.");
   for (let i = 0; i < contracts.length; i++) {
@@ -35,7 +35,7 @@ export async function main(ns) {
     ns.tprintf("^^^^^^^^^^^^^^^^^^^^^^");
 
     if (score == 1) numWon++;
-    else if (score == 0) numPassed++;
+    else if (score == 0) numSkipped++;
     else if (score == -1) {
       numFailed++;
       if (exitOnFail) break;
@@ -61,7 +61,7 @@ export async function main(ns) {
   for (let i = 0; i < contractKeys.length; i++) {
     ns.tprintf("%s: %d contracts seen", contractKeys[i], contractCounts[contractKeys[i]]);
   }
-  ns.tprintf("%d won, %d passed, %d failed", numWon, numPassed, numFailed)
+  ns.tprintf("%d won, %d skipped, %d failed", numWon, numSkipped, numFailed)
 }
 
 /** @param {NS} ns **/

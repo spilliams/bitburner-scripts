@@ -66,6 +66,7 @@ async function upgradeServer(ns, hostname, payload, target) {
   while (ns.getServerMoneyAvailable("home") < cost) {
     await ns.sleep(30000);
   }
+  ns.toast(ns.sprintf("upgrading %s to %s", hostname, formatMem(newRAM)), "info");
   ns.killall(hostname);
   ns.deleteServer(hostname);
   ns.purchaseServer(hostname, newRAM);
@@ -75,4 +76,14 @@ async function upgradeServer(ns, hostname, payload, target) {
   ns.exec(payload, hostname, threads, target);
 
   return true
+}
+
+function formatMem(gb) {
+  let cursor = 0;
+  const units = ["GB", "TB", "PB", "EB", "ZB", "YB"];
+  while (gb >= 1000) {
+    gb /= 1000;
+    cursor++;
+  }
+  return "" + gb.toFixed(3) + units[cursor];
 }

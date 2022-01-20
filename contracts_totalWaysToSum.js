@@ -37,9 +37,9 @@ export function totalWaysToSum(ns, n, debug = false) {
 
   // sort each way
   for (let i = 0; i < list.length; i++) {
-    list[i].sort().reverse();
+    list[i].sort(sortNumsDesc);
   }
-  list.sort();
+  list.sort(sortArrNumsAsc);
 
   // if (debug) {
   // 	ns.tprintf("before dedupe:");
@@ -59,6 +59,25 @@ export function totalWaysToSum(ns, n, debug = false) {
   }
   // ns.tprintf("DONE WITH WAYS TO SUM %d", n);
   return list
+}
+
+function sortNumsDesc(a, b) {
+  return b - a;
+}
+
+function sortArrNumsAsc(a, b) {
+  const minL = Math.min(a.length, b.length);
+  for (let i = 0; i < minL; i++) {
+    if (a[i] != b[i]) {
+      return a[i] - b[i];
+    }
+  }
+  if (a.length > b.length) {
+    return 1;
+  } else if (b.length > a.length) {
+    return -1;
+  }
+  return 0;
 }
 
 function copy(nArr) {

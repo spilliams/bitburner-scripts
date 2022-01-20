@@ -56,6 +56,4 @@ async function downloadAll(ns) {
       ns.tprintf("failed to download %s", files[i]);
     }
   }
-
-  ns.tprintf("done!");
 }

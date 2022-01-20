@@ -94,11 +94,6 @@ export function algorithmicStockTrader3(ns, data) {
   return Math.max(...sumOfMaxes);
 }
 
-/** @param {NS} ns **/
-export function algorithmicStockTrader2(ns, data) {
-
-}
-
 function empty2D(l) {
   let arr = [];
   for (let r = 0; r < l; r++) {
