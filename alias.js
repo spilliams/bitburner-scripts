@@ -1,26 +1,23 @@
 /** @param {NS} ns **/
 export async function main(ns) {
-  const reverseTree = buildTree(ns);
-  const leaves = Object.keys(reverseTree);
+  const linkMap = buildMap(ns);
+  const leaves = Object.keys(linkMap);
   leaves.sort();
   for (let i = 0; i < leaves.length; i++) {
     const leaf = leaves[i];
-    const sources = reverseTree[leaf];
-
-    // graphviz
-    for (let j = 0; j < sources.length; j++) {
-      if (sources[j].includes("pserv") || leaf.includes("pserv")) continue;
-      ns.tprintf(`"%s" -> "%s"`, sources[j], leaf);
-    }
+    const connects = linkMap[leaf];
+    let name = leaf.split("-").join("_");
+    name = name.split(".").join("dot");
+    ns.tprintf("alias goto_%s=\"%s\";", name, connects);
   }
 }
 
 /** @param {NS} ns **/
-function buildTree(ns) {
+function buildMap(ns) {
 
   let scanning = ["home"];
   let scannedAll = false;
-  let reverseTree = {};
+  let linkMap = {};
 
   while (!scannedAll) {
     const originalLength = scanning.length;
@@ -33,11 +30,13 @@ function buildTree(ns) {
         if (!scanning.includes(leaf)) {
           scanning.push(leaf);
         }
-        if (typeof reverseTree[leaf] == "undefined") {
-          reverseTree[leaf] = [];
-        }
-        if (!reverseTree[leaf].includes(root)) {
-          reverseTree[leaf].push(root);
+        const mapped = Object.keys(linkMap)
+        if (!mapped.includes(leaf)) {
+          if (!mapped.includes(root)) {
+            linkMap[leaf] = "connect " + leaf;
+          } else {
+            linkMap[leaf] = linkMap[root] + "; connect " + leaf;
+          }
         }
       }
       i++;
@@ -49,5 +48,5 @@ function buildTree(ns) {
   }
 
   ns.tprintf("done! scanned %d servers", scanning.length);
-  return reverseTree;
+  return linkMap;
 }
