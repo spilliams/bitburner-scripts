@@ -7,12 +7,10 @@ import { breakIt, takeIt } from "infect.js";
 
 const helperPayload = "3.js";
 
-const bufferMS = 100;
+const bufferMS = 500;
 
 /** @param {NS} ns **/
 export async function main(ns) {
-  const helperPayloadRAM = ns.getScriptRam(helperPayload);
-
   // what are my helpers?
   // servers that run 3.js with an action at invoke-time, and they wait for jobs to come
   // from the comm port?
@@ -66,10 +64,10 @@ export async function main(ns) {
   const currentHackingSkill = ns.getHackingLevel();
   const server = ns.getServer(target);
   // TODO switch to these if they're less than the 2GB for getServer...
-  const moneyThreshold = ns.getServerMaxMoney(target) * 0.75;
+  // const moneyThreshold = ns.getServerMaxMoney(target) * 0.75;
   const minSecLevel = ns.getServerMinSecurityLevel(target);
-  const securityThreshold = minSecLevel + 5;
-  const currentSecLevel = ns.getServerSecurityLevel(target);
+  // const securityThreshold = minSecLevel + 5;
+  // const currentSecLevel = ns.getServerSecurityLevel(target);
   // const serverMoney = ns.getServerMoneyAvailable(target);
 
   if (server["requiredHackingSkill"] > currentHackingSkill) {
@@ -82,27 +80,68 @@ export async function main(ns) {
   }
 
   ns.tprintf("Information on target '%s'", target);
-  ns.tprintf("Current money is %s (max %s)", formatMoney(server["moneyAvailable"]), formatMoney(server["moneyMax"]));
-  ns.tprintf("Difficulty is %d min, %d base, %d hack", server["minDifficulty"], server["baseDifficulty"], server["hackDifficulty"]);
-  ns.tprintf("Security level is %d (min %d)", currentSecLevel, minSecLevel);
   ns.tprintf("Current growth is %d", server["serverGrowth"]);
 
+  await prepareTarget(ns, target, pool);
+
+  // const growMS = ns.getGrowTime(target);
+  // const weakMS = ns.getWeakenTime(target);
+  // const hackMS = ns.getHackTime(target);
+  // const batchMS = Math.max(
+  // 	4 * bufferMS + hackMS,
+  // 	3 * bufferMS + weakMS,
+  // 	2 * bufferMS + growMS
+  // );
+  // let concurrentBatches = Math.ceil(batchMS / (4 * bufferMS));
+  // ns.tprintf("grow time is %dms", growMS);
+  // ns.tprintf("weaken time is %dms", weakMS);
+  // ns.tprintf("hack time is %dms", hackMS);
+  // ns.tprintf("batch time (HWGW) is %fs total, %dms hot (%f%% hot)", (batchMS / 1000.0).toFixed(3), (4 * bufferMS), (100 * (4 * bufferMS) / batchMS).toFixed(2));
+  // ns.tprintf("I will want to run %d batches at once (%d helpers)", concurrentBatches, 4 * concurrentBatches);
+  // let batchBufferMS = 0;
+  // if (4 * concurrentBatches > pool.length) {
+  // 	// ---------*
+  // 	//  ---------*
+  // 	//   ---------*
+  // 	//    ---------*
+  // 	//     ---------*
+  // 	//      ---------*
+  // 	//       ---------*
+  // 	//        ---------*
+  // 	//         ---------*
+  // 	//          ---------*
+  // 	// vs
+  // 	// ---------*--
+  // 	//    ---------*--
+  // 	//       ---------*--
+  // 	//          ---------*
+  // 	concurrentBatches = Math.floor(pool.length / 4);
+  // 	batchBufferMS = Math.ceil(batchMS / concurrentBatches);
+  // 	ns.tprintf("Since I only have %d helpers (%d max concurrent batches), I have to set the inter-batch buffer to %dms", pool.length, concurrentBatches, batchBufferMS);
+  // }
+
+  ns.tprintf("T1M3 7O H4CK");
+}
+
+/** @param {NS} ns **/
+async function prepareTarget(ns, target, pool) {
+  ns.tprintf("Preparing target %s", target);
+
+  const helpersPerBatch = 2;
   const growMS = ns.getGrowTime(target);
   const weakMS = ns.getWeakenTime(target);
-  const hackMS = ns.getHackTime(target);
   const batchMS = Math.max(
-    4 * bufferMS + hackMS,
-    3 * bufferMS + weakMS,
-    2 * bufferMS + growMS
+    helpersPerBatch * bufferMS + growMS,
+    bufferMS + weakMS
   );
-  let concurrentBatches = Math.ceil(batchMS / (4 * bufferMS));
+  const hotMS = helpersPerBatch * bufferMS;
+  let concurrentBatches = Math.ceil(batchMS / hotMS);
   ns.tprintf("grow time is %dms", growMS);
   ns.tprintf("weaken time is %dms", weakMS);
-  ns.tprintf("hack time is %dms", hackMS);
-  ns.tprintf("batch time (HWGW) is %fs total, %dms hot (%f%% hot)", (batchMS / 1000.0).toFixed(3), (4 * bufferMS), (100 * (4 * bufferMS) / batchMS).toFixed(2));
-  ns.tprintf("I will want to run %d batches at once (%d helpers)", concurrentBatches, 4 * concurrentBatches);
+  ns.tprintf("batch time (GW) is %fs total, %dms hot (%f%% hot)", (batchMS / 1000.0).toFixed(3), hotMS, (100 * hotMS / batchMS).toFixed(2));
+  ns.tprintf("I will want to run %d batches at once (%d helpers)", concurrentBatches, helpersPerBatch * concurrentBatches);
   let batchBufferMS = 0;
-  if (4 * concurrentBatches > pool.length) {
+  if (helpersPerBatch * concurrentBatches > pool.length) {
     // ---------*
     //  ---------*
     //   ---------*
@@ -118,18 +157,72 @@ export async function main(ns) {
     //    ---------*--
     //       ---------*--
     //          ---------*
-    concurrentBatches = Math.floor(pool.length / 4);
+    concurrentBatches = Math.floor(pool.length / helpersPerBatch);
     batchBufferMS = Math.ceil(batchMS / concurrentBatches);
     ns.tprintf("Since I only have %d helpers (%d max concurrent batches), I have to set the inter-batch buffer to %dms", pool.length, concurrentBatches, batchBufferMS);
   }
+  const batchConfig = {
+    "tasks": [
+      {
+        "exec": helperPayload,
+        "args": ["grow", target],
+        "delayMS": batchMS - 2 * bufferMS - growMS
+      },
+      {
+        "exec": helperPayload,
+        "args": ["weaken", target],
+        "delayMS": batchMS - bufferMS - weakMS
+      }
+    ]
+  }
+  ns.tprintf("batch configured");
 
-  if (currentSecLevel > securityThreshold) {
-    ns.tprintf("Security Level is higher than threshold; I recommend `weaken`.");
-    return;
+  let cursor = 0;
+  let timeoutMap = {};
+  while (!targetPrepared(ns, target)) {
+    let helpers = [];
+    for (let i = cursor; i < cursor + helpersPerBatch; i++) {
+      helpers.push(pool[i % pool.length]);
+    }
+    ns.tprintf("helpers %v (cursor was %d, pool length %d)", helpers, cursor, pool.length);
+    timeoutMap[cursor] = runBatch(ns, helpers, batchConfig);
+    ns.tprintf("  done, sleeping");
+    cursor = (cursor + helpersPerBatch) % pool.length;
+    await ns.sleep(batchBufferMS);
   }
-  if (server["moneyAvailable"] < moneyThreshold) {
-    ns.tprintf("Server money is lower than threshold; I recommend `grow`.");
-    return;
+}
+
+/** @param {NS} ns **/
+function runBatch(ns, helpers, cfg) {
+  if (helpers.length != cfg.tasks.length) {
+    throw ns.tprintf("number of helpers (%d) must match number of tasks (%d) in the batch", helpers.length, cfg.tasks.length);
   }
-  nt.tprintf("T1M3 7O H4CK");
+  let timeouts = [];
+  ns.tprintf("running batch");
+  for (let i = 0; i < helpers.length; i++) {
+    const task = cfg.tasks[i];
+    ns.tprintf("  running %s on %s to %v after %dms", task.exec, helpers[i], task.args, task.delayMS);
+    timeouts.push(setTimeout(runTask, task.delayMS, ns, helpers[i], task.exec, ...task.args));
+  }
+  return timeouts;
+}
+
+/** @param {NS} ns **/
+function runTask(ns, helper, payload, ...args) {
+  ns.exec(payload, helper, 1, ...args);
+}
+
+/** @param {NS} ns **/
+function targetPrepared(ns, target) {
+  const serverMaxMoney = ns.getServerMaxMoney(target);
+  const moneyThreshold = serverMaxMoney * 0.75;
+  const minSecLevel = ns.getServerMinSecurityLevel(target);
+  const securityThreshold = minSecLevel + 5;
+  const currentSecLevel = ns.getServerSecurityLevel(target);
+  const serverMoney = ns.getServerMoneyAvailable(target);
+
+  ns.tprintf("Current money is %s (max %s)", formatMoney(serverMoney), formatMoney(serverMaxMoney));
+  ns.tprintf("Security level is %d (min %d)", currentSecLevel, minSecLevel);
+
+  return currentSecLevel <= securityThreshold && serverMoney >= moneyThreshold
 }

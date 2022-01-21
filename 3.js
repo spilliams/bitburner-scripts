@@ -9,11 +9,11 @@ export async function main(ns) {
   const target = ns.args[1];
   switch (action) {
     case "weaken":
-      return ns.weaken(target);
+      return await ns.weaken(target);
     case "grow":
-      return ns.grow(target);
+      return await ns.grow(target);
     case "hack":
-      return ns.hack(target);
+      return await ns.hack(target);
     default:
       throw "unrecognized action " + action;
   }
