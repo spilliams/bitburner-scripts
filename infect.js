@@ -29,7 +29,7 @@ export async function main(ns) {
       continue;
     }
     sumTargets++;
-    sumThreads += await takeIt(ns, host, payload, true, args);
+    sumThreads += await takeIt(ns, host, payload, args);
   }
   ns.tprintf("Started %d threads on %d servers", sumThreads, sumTargets);
 }
@@ -62,7 +62,7 @@ export async function breakIt(ns, target) {
 
 /** @param {NS} ns **/
 /** @return The number of threads started on the target **/
-export async function takeIt(ns, host, payload, exec = false, args = []) {
+async function takeIt(ns, host, payload, args = []) {
   await ns.killall(host);
   const max = ns.getServerMaxRam(host);
   const used = ns.getServerUsedRam(host);
@@ -72,8 +72,6 @@ export async function takeIt(ns, host, payload, exec = false, args = []) {
     return 0;
   }
   await ns.scp(payload, "home", host);
-  if (exec) {
-    ns.exec(payload, host, threads, ...args);
-  }
+  ns.exec(payload, host, threads, ...args);
   return threads;
 }
