@@ -3,6 +3,9 @@
 // weaken/grow/hack script
 // args: port to listen to, a string to identify me (e.g. my own hostname)
 
+const toasty = false;
+const toastMS = 800;
+
 /** @param {NS} ns **/
 export async function main(ns) {
   const port = ns.args[0];
@@ -11,7 +14,7 @@ export async function main(ns) {
   while (true) {
     const job = ns.readPort(port);
     if (job !== "NULL PORT DATA") {
-      // ns.toast(ns.sprintf("%s: %s", id, job), "info");
+      if (toasty) ns.toast(ns.sprintf("%s: %s", id, job), "info", toastMS);
 
       const parts = job.split(" ");
       await ns.sleep(parseInt(parts[0]));
@@ -32,7 +35,7 @@ export async function main(ns) {
           throw "unrecognized action " + verb;
       }
 
-      // ns.toast(ns.sprintf("%s: %s complete on %s", id, verb, target), "success");
+      if (toasty) ns.toast(ns.sprintf("%s: %s complete on %s", id, verb, target), "success", toastMS);
     }
     await ns.sleep(1000);
   }

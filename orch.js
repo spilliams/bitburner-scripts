@@ -5,12 +5,17 @@ import { breakIt } from "infect.js";
 
 // args: target
 
-const helperPayload = "4.js";
 const bufferMS = 500; // time between tasks in a batch
 const minBatchBufferMS = 100; // min time between batches
-const botPort = 1;
+const predictiveBatchTiming = false; // if off, just delay the minBatchBufferMS between batches
 const portFullWaitMS = 2000;
-const maxBotsPerHost = 16;
+const toastOnPortFull = false;
+
+const botPort = 1;
+const helperPayload = "4.js";
+const maxBotsPerHost = 40;
+const useOnlyPurchasedServers = true;
+const fillBotServer = true; // whether to maximize each bot server (run payload multi-threaded)
 const takeItWaitMS = 50; // time bw bot spinups (many bots per host)
 
 /** @param {NS} ns **/
@@ -30,7 +35,9 @@ export async function main(ns) {
 
   // build a pool of bots.
   // a bot is a single-threaded run of payload on a server
-  const servers = scanAll(ns);
+  let servers;
+  if (useOnlyPurchasedServers) servers = ns.getPurchasedServers();
+  else servers = scanAll(ns);
   ns.tprintf("Scanned %d servers", servers.length);
   const numBots = await setupHelperPool(ns, servers);
   ns.tprintf("%d bots in the pool", numBots);
@@ -84,20 +91,22 @@ async function setupHelperPool(ns, servers) {
 /** @return Whether it executed the payload on the host **/
 async function takeIt(ns, host, payload, args = []) {
   await ns.killall(host);
-  const avail = ns.getServerMaxRam(host) - ns.getServerUsedRam(host);
-  let threads = Math.floor(avail / ns.getScriptRam(payload));
-  threads = Math.min(threads, maxBotsPerHost);
-  const suffixLen = Math.ceil(Math.log10(threads));
-  for (let i = 0; i < threads; i++) {
+  // todo: test this logic, I'm pretty sure it's wrong when fillBotServer is false
+  const availableRAM = ns.getServerMaxRam(host) - ns.getServerUsedRam(host);
+  const availableThreads = Math.floor(availableRAM / ns.getScriptRam(payload));
+  const numBots = Math.min(availableThreads, maxBotsPerHost);
+  const threadsPerBot = Math.floor(availableThreads / numBots);
+  if (!fillBotServer) threadsPerBot = 1;
+  const suffixLen = Math.ceil(Math.log10(numBots));
+  for (let i = 0; i < numBots; i++) {
     await ns.scp(payload, "home", host);
-    let newName = payload.split(".")[0] + "-" + pad(i, suffixLen) + "." + payload.split(".")[1]
+    let newName = payload.split(".")[0] + "-" + pad(i, suffixLen) + "." + payload.split(".")[1];
     ns.mv(host, payload, newName);
-    if (threads > 1000 && i % 1000 === 0) ns.tprintf("...working on %ds (of %d) on %s", i, threads, host);
-    ns.exec(newName, host, 1, ...args);
+    ns.exec(newName, host, threadsPerBot, ...args);
     await ns.sleep(takeItWaitMS);
   }
 
-  return threads;
+  return numBots;
 }
 
 /** @param {NS} ns **/
@@ -115,13 +124,14 @@ async function prepareTarget(ns, target, pool) {
   ns.tprintf("grow time is %dms", growMS);
   ns.tprintf("weaken time is %dms", weakMS);
   ns.tprintf("batch time (GW) is %fs total, %dms hot (%f%% hot)", (batchMS / 1000.0).toFixed(3), hotMS, (100 * hotMS / batchMS).toFixed(2));
-  ns.tprintf("I want to run %d batches at once (%d helpers)", concurrentBatches, 2 * concurrentBatches);
+  ns.tprintf("I want to run %d batches at once (%d bots)", concurrentBatches, 2 * concurrentBatches);
   let batchBufferMS = minBatchBufferMS;
-  if (2 * concurrentBatches > pool.length) {
+  if (predictiveBatchTiming && 2 * concurrentBatches > pool.length) {
     concurrentBatches = Math.floor(pool.length / 2);
     batchBufferMS = Math.ceil(batchMS / concurrentBatches);
-    ns.tprintf("Since I only have %d helpers (%d max concurrent batches), I have to set the inter-batch buffer to %dms", pool.length, concurrentBatches, batchBufferMS);
+    ns.tprintf("Since I only have %d bots (%d max concurrent batches), I have to set the inter-batch buffer to %dms", pool.length, concurrentBatches, batchBufferMS);
   }
+  ns.tprintf("batch buffer: %dms", batchBufferMS);
   const tasks = [
     {
       "delayMS": batchMS - 2 * bufferMS - growMS,
@@ -134,7 +144,6 @@ async function prepareTarget(ns, target, pool) {
       "target": target
     }
   ]
-  ns.tprintf("batch configured");
 
   while (!targetPrepared(ns, target)) {
     await runBatch(ns, tasks);
@@ -161,7 +170,7 @@ async function hackTarget(ns, target, pool) {
   // ns.tprintf("batch time (WGWH) is %fs total, %dms hot (%f%% hot)", (batchMS / 1000.0).toFixed(3), hotMS, (100 * hotMS / batchMS).toFixed(2));
   // ns.tprintf("I want to run %d batches at once (%d helpers)", concurrentBatches, 4 * concurrentBatches);
   let batchBufferMS = minBatchBufferMS;
-  if (4 * concurrentBatches > pool.length) {
+  if (predictiveBatchTiming && 4 * concurrentBatches > pool.length) {
     concurrentBatches = Math.floor(pool.length / 4);
     batchBufferMS = Math.ceil(batchMS / concurrentBatches);
     // ns.tprintf("Since I only have %d helpers (%d max concurrent batches), I have to set the inter-batch buffer to %dms", pool.length, concurrentBatches, batchBufferMS);
@@ -204,7 +213,7 @@ async function runBatch(ns, tasks) {
     while (!written) {
       written = await ns.tryWritePort(botPort, ["" + task.delayMS, task.verb, task.target].join(" "));
       if (!written) {
-        ns.toast(ns.sprintf("port %d full, waiting %dms", botPort, portFullWaitMS), "warning", portFullWaitMS);
+        if (toastOnPortFull) ns.toast(ns.sprintf("port %d full, waiting %dms", botPort, portFullWaitMS), "warning", portFullWaitMS);
         await ns.sleep(portFullWaitMS);
       }
     }
