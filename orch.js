@@ -10,7 +10,7 @@ const bufferMS = 500; // time between tasks in a batch
 const minBatchBufferMS = 100; // min time between batches
 const botPort = 1;
 const portFullWaitMS = 2000;
-const maxBotsPerHost = 99;
+const maxBotsPerHost = 16;
 const takeItWaitMS = 50; // time bw bot spinups (many bots per host)
 
 /** @param {NS} ns **/
@@ -204,7 +204,7 @@ async function runBatch(ns, tasks) {
     while (!written) {
       written = await ns.tryWritePort(botPort, ["" + task.delayMS, task.verb, task.target].join(" "));
       if (!written) {
-        ns.toast(ns.sprintf("port %d full, waiting %dms", botPort, portFullWaitMS));
+        ns.toast(ns.sprintf("port %d full, waiting %dms", botPort, portFullWaitMS), "warning", portFullWaitMS);
         await ns.sleep(portFullWaitMS);
       }
     }

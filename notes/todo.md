@@ -28,17 +28,26 @@ Actually, I might have a better solution:
 run 4.js as many times as possible on each bot server. This is really intensive
 to set up, but hopefully once it's running it does ok?
 
-1. Might have to make sure the batch delay time is minimum 100ms or something.
-2. Might want to start building them in the background somehow, with promises.
+1. Might want to start building them in the background somehow, with promises.
   I can predict how many I'll end up setting up, and the gwhw part can block on
   ports being full until omre come online...
-3. may also want to be able to build them externally, so that I can run orch and
+2. may also want to be able to build them externally, so that I can run orch and
   intermittently spin up more bots. This might also involve sending a message on
   a port for the orchestrator saying "i spun up N new bots, adjust your
   estimates accordingly".
-4. sort the hosts to track progress better?
-5. ok I'm at the point where toasts are TOO MUCH, and so is the constant tprint
-
+3. For where I'm at now with ecorp (max 99 bots per host), I'm not even using a
+quarter of my pool for the one target:
+3538 bots in the pool
+Preparing target ecorp
+grow time is 294789ms
+weaken time is 368486ms
+batch time (GW) is 368.987s total, 1000ms hot (0.27% hot)
+I want to run 369 batches at once (738 helpers)
+So for these early tests I'm turning `maxBotsPerHost` wayyy down. And later we
+can talk about multiple targets. because running all hosts at 100% bots means I
+can likely hit every single target in the game as quickly as I want to...jesus.
+4. (it might still be simpler to try to run 4.js multi-threaded, to decrease
+thread time, instead of running more threads)
 
 # Future Ideas
 

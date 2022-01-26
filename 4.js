@@ -11,7 +11,7 @@ export async function main(ns) {
   while (true) {
     const job = ns.readPort(port);
     if (job !== "NULL PORT DATA") {
-      ns.toast(ns.sprintf("%s: %s", id, job), "info");
+      // ns.toast(ns.sprintf("%s: %s", id, job), "info");
 
       const parts = job.split(" ");
       await ns.sleep(parseInt(parts[0]));
@@ -32,7 +32,7 @@ export async function main(ns) {
           throw "unrecognized action " + verb;
       }
 
-      ns.toast(ns.sprintf("%s: %s complete on %s", id, verb, target), "success");
+      // ns.toast(ns.sprintf("%s: %s complete on %s", id, verb, target), "success");
     }
     await ns.sleep(1000);
   }
