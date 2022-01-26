@@ -24,14 +24,17 @@ export async function main(ns) {
   // clear the queue first, in case it's got old jobs in it
   ns.clearPort(portToUse);
 
-  // helpers are servers that run the payload, waiting for instructions from the portToUse
-  const pool = await setupHelperPool(ns);
-  ns.tprintf("%d servers in the pool", pool.length);
+  const servers = scanAll(ns);
+  ns.tprintf("Scanned %d servers", servers.length);
 
-  await prepareTarget(ns, target, pool);
+  // The pool has bots in it. a bot is a single-threaded run of payload on a server
+  const numBots = await setupHelperPool(ns, servers);
+  ns.tprintf("%d bots in the pool", numBots);
+
+  await prepareTarget(ns, target, numBots);
 
   while (true) {
-    await hackTarget(ns, target, pool);
+    await hackTarget(ns, target, numBots);
   }
 }
 
@@ -53,10 +56,8 @@ async function targetValid(ns, hostname) {
 }
 
 /** @param {NS} ns **/
-async function setupHelperPool(ns) {
-  const servers = scanAll(ns);
-  let pool = [];
-  ns.tprintf("Scanned %d servers", servers.length);
+async function setupHelperPool(ns, servers) {
+  let numBots = 0;
   for (let i = 0; i < servers.length; i++) {
     const host = servers[i];
     if (host == "home") {
@@ -67,15 +68,11 @@ async function setupHelperPool(ns) {
       continue;
     }
 
-    const started = await takeIt(ns, host, helperPayload, [portToUse, host]);
-    if (started) {
-      pool.push(host);
-    }
+    numBots += await takeIt(ns, host, helperPayload, [portToUse, host]);
   }
-  return pool;
+  return numBots;
 }
 
-// Executes a payload on a host, if it has enough memory to.
 /** @param {NS} ns **/
 /** @return Whether it executed the payload on the host **/
 async function takeIt(ns, host, payload, args = []) {
@@ -83,14 +80,19 @@ async function takeIt(ns, host, payload, args = []) {
   const max = ns.getServerMaxRam(host);
   const used = ns.getServerUsedRam(host);
   const avail = max - used;
-  const threads = ((avail / ns.getScriptRam(payload)) * 10) / 10;
-  if (threads < 1) {
-    return false;
+  const threads = Math.floor(avail / ns.getScriptRam(payload));
+  const suffixLen = Math.ceil(Math.log10(threads));
+  for (let i = 0; i < threads; i++) {
+    await ns.scp(payload, "home", host);
+    let newName = payload.split(".")[0] + "-" + pad(i, suffixLen) + "." + payload.split(".")[1]
+    ns.mv(host, payload, newName);
+    if (threads > 1000 && i % 1000 === 0) ns.tprintf("...working on %ds (of %d) on %s", i, threads, host);
+    ns.exec(newName, host, 1, ...args);
+    await ns.sleep(1);
   }
-  await ns.scp(payload, "home", host);
-  // we want it to be 1 thread because more might make the timing all wonky?
-  ns.exec(payload, host, 1, ...args);
-  return true;
+  ns.tprintf("started %d scripts on %s", threads, host);
+
+  return threads.length;
 }
 
 /** @param {NS} ns **/
@@ -219,4 +221,10 @@ function targetPrepared(ns, target) {
   ns.tprintf("Security level is %d (min %d)", currentSecLevel, minSecLevel);
 
   return currentSecLevel <= securityThreshold && serverMoney >= moneyThreshold
+}
+
+function pad(num, len, char = "0") {
+  let str = "" + num;
+  while (str.length < len) str = char + str;
+  return str;
 }
