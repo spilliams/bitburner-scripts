@@ -5,7 +5,7 @@ export async function main(ns) {
 
 /** @param {Number} dollars **/
 export function formatMoney(dollars) {
-  const suffixes = ["", "k", "m", "b", "t", "q"];
+  const suffixes = ["", "k", "m", "b", "t", "q", "Q"];
   let suffix = 0;
   let left = dollars;
   while (left > 1000) {
