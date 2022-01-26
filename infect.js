@@ -81,7 +81,7 @@ async function cleanIt(ns, host, payload, args = []) {
 
 /** @param {NS} ns **/
 /** @return The number of threads started on the target **/
-async function takeIt(ns, host, payload, args = []) {
+export async function takeIt(ns, host, payload, args = []) {
   const max = ns.getServerMaxRam(host);
   const used = ns.getServerUsedRam(host);
   const avail = max - used;
