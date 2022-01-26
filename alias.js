@@ -33,7 +33,7 @@ function buildMap(ns) {
         const mapped = Object.keys(linkMap)
         if (!mapped.includes(leaf)) {
           if (!mapped.includes(root)) {
-            linkMap[leaf] = "connect " + leaf;
+            linkMap[leaf] = "home; connect " + leaf;
           } else {
             linkMap[leaf] = linkMap[root] + "; connect " + leaf;
           }
