@@ -4,6 +4,9 @@ import { scanAll } from "util_recurse.js";
 // scans the local network.
 // for every connection on it, copies this script to it, runs it.
 
+// if we find a server with stuff running on it that isn't the script we want, kill all that stuff
+const killAllRunning = true;
+
 /** @param {NS} ns **/
 export async function main(ns) {
   if (ns.args.length < 1) {
@@ -29,6 +32,9 @@ export async function main(ns) {
       continue;
     }
     sumTargets++;
+
+    await cleanIt(ns, host, payload, args);
+
     sumThreads += await takeIt(ns, host, payload, args);
   }
   ns.tprintf("Started %d threads on %d servers", sumThreads, sumTargets);
@@ -61,9 +67,21 @@ export async function breakIt(ns, target) {
 }
 
 /** @param {NS} ns **/
+async function cleanIt(ns, host, payload, args = []) {
+  const rs = ns.getRunningScript(payload, host, ...args);
+  // if there is a running script with these args, leave it alone
+  if (rs !== null) {
+    return;
+  }
+  // otherwise, there might be a running script with other args, so kill all
+  if (killAllRunning) {
+    await ns.killall(host);
+  }
+}
+
+/** @param {NS} ns **/
 /** @return The number of threads started on the target **/
 async function takeIt(ns, host, payload, args = []) {
-  await ns.killall(host);
   const max = ns.getServerMaxRam(host);
   const used = ns.getServerUsedRam(host);
   const avail = max - used;
