@@ -8,6 +8,7 @@ import { breakIt } from "infect.js";
 const helperPayload = "4.js";
 const bufferMS = 500;
 const portToUse = 1;
+const portFullWaitMS = 2000;
 
 /** @param {NS} ns **/
 export async function main(ns) {
@@ -19,6 +20,9 @@ export async function main(ns) {
   // first, make sure I can hack it
   const valid = await targetValid(ns, target)
   if (!valid) return;
+
+  // clear the queue first, in case it's got old jobs in it
+  ns.clearPort(portToUse);
 
   // helpers are servers that run the payload, waiting for instructions from the portToUse
   const pool = await setupHelperPool(ns);
@@ -63,7 +67,7 @@ async function setupHelperPool(ns) {
       continue;
     }
 
-    const started = await takeIt(ns, host, helperPayload, [portToUse]);
+    const started = await takeIt(ns, host, helperPayload, [portToUse, host]);
     if (started) {
       pool.push(host);
     }
@@ -191,7 +195,14 @@ async function runBatch(ns, tasks) {
   for (let i = 0; i < tasks.length; i++) {
     const task = tasks[i];
     ns.tprintf("  running %s on %s after %dms", task.verb, task.target, task.delayMS);
-    await ns.writePort(portToUse, ["" + task.delayMS, task.verb, task.target].join(" "));
+    let written = false;
+    while (!written) {
+      written = await ns.tryWritePort(portToUse, ["" + task.delayMS, task.verb, task.target].join(" "));
+      if (!written) {
+        ns.toast(ns.sprintf("port %d full, waiting %dms", portToUse, portFullWaitMS));
+        await ns.sleep(portFullWaitMS);
+      }
+    }
   }
 }
 
