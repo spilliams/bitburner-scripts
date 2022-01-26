@@ -24,6 +24,22 @@ can know more definitely *this* is the server I'm running this on, and this is
 how many threads I'll use right now.  
 The quetion then becomes, how do I track the availability of my bots?
 
+Actually, I might have a better solution:
+run 4.js as many times as possible on each bot server. This is really intensive
+to set up, but hopefully once it's running it does ok?
+
+1. Might have to make sure the batch delay time is minimum 100ms or something.
+2. Might want to start building them in the background somehow, with promises.
+  I can predict how many I'll end up setting up, and the gwhw part can block on
+  ports being full until omre come online...
+3. may also want to be able to build them externally, so that I can run orch and
+  intermittently spin up more bots. This might also involve sending a message on
+  a port for the orchestrator saying "i spun up N new bots, adjust your
+  estimates accordingly".
+4. sort the hosts to track progress better?
+5. ok I'm at the point where toasts are TOO MUCH, and so is the constant tprint
+
+
 # Future Ideas
 
 - script for joining factions and buying augs? (once I get Singularity access)

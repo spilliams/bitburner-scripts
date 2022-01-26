@@ -6,9 +6,12 @@ import { breakIt } from "infect.js";
 // args: target
 
 const helperPayload = "4.js";
-const bufferMS = 500;
-const portToUse = 1;
+const bufferMS = 500; // time between tasks in a batch
+const minBatchBufferMS = 100; // min time between batches
+const botPort = 1;
 const portFullWaitMS = 2000;
+const maxBotsPerHost = 99;
+const takeItWaitMS = 50; // time bw bot spinups (many bots per host)
 
 /** @param {NS} ns **/
 export async function main(ns) {
@@ -17,22 +20,24 @@ export async function main(ns) {
     return;
   }
   const target = ns.args[0];
+
   // first, make sure I can hack it
   const valid = await targetValid(ns, target)
   if (!valid) return;
 
-  // clear the queue first, in case it's got old jobs in it
-  ns.clearPort(portToUse);
+  // clear the queue, in case it's got old jobs in it
+  ns.clearPort(botPort);
 
+  // build a pool of bots.
+  // a bot is a single-threaded run of payload on a server
   const servers = scanAll(ns);
   ns.tprintf("Scanned %d servers", servers.length);
-
-  // The pool has bots in it. a bot is a single-threaded run of payload on a server
   const numBots = await setupHelperPool(ns, servers);
   ns.tprintf("%d bots in the pool", numBots);
 
   await prepareTarget(ns, target, numBots);
 
+  ns.tprintf("T1M3 7O H4CK");
   while (true) {
     await hackTarget(ns, target, numBots);
   }
@@ -68,7 +73,9 @@ async function setupHelperPool(ns, servers) {
       continue;
     }
 
-    numBots += await takeIt(ns, host, helperPayload, [portToUse, host]);
+    let bots = await takeIt(ns, host, helperPayload, [botPort, host]);
+    ns.tprintf("started %d bots on %s (%d/%d)", bots, host, i + 1, servers.length);
+    numBots += bots;
   }
   return numBots;
 }
@@ -77,10 +84,9 @@ async function setupHelperPool(ns, servers) {
 /** @return Whether it executed the payload on the host **/
 async function takeIt(ns, host, payload, args = []) {
   await ns.killall(host);
-  const max = ns.getServerMaxRam(host);
-  const used = ns.getServerUsedRam(host);
-  const avail = max - used;
-  const threads = Math.floor(avail / ns.getScriptRam(payload));
+  const avail = ns.getServerMaxRam(host) - ns.getServerUsedRam(host);
+  let threads = Math.floor(avail / ns.getScriptRam(payload));
+  threads = Math.min(threads, maxBotsPerHost);
   const suffixLen = Math.ceil(Math.log10(threads));
   for (let i = 0; i < threads; i++) {
     await ns.scp(payload, "home", host);
@@ -88,11 +94,10 @@ async function takeIt(ns, host, payload, args = []) {
     ns.mv(host, payload, newName);
     if (threads > 1000 && i % 1000 === 0) ns.tprintf("...working on %ds (of %d) on %s", i, threads, host);
     ns.exec(newName, host, 1, ...args);
-    await ns.sleep(1);
+    await ns.sleep(takeItWaitMS);
   }
-  ns.tprintf("started %d scripts on %s", threads, host);
 
-  return threads.length;
+  return threads;
 }
 
 /** @param {NS} ns **/
@@ -111,7 +116,7 @@ async function prepareTarget(ns, target, pool) {
   ns.tprintf("weaken time is %dms", weakMS);
   ns.tprintf("batch time (GW) is %fs total, %dms hot (%f%% hot)", (batchMS / 1000.0).toFixed(3), hotMS, (100 * hotMS / batchMS).toFixed(2));
   ns.tprintf("I want to run %d batches at once (%d helpers)", concurrentBatches, 2 * concurrentBatches);
-  let batchBufferMS = 0;
+  let batchBufferMS = minBatchBufferMS;
   if (2 * concurrentBatches > pool.length) {
     concurrentBatches = Math.floor(pool.length / 2);
     batchBufferMS = Math.ceil(batchMS / concurrentBatches);
@@ -133,15 +138,13 @@ async function prepareTarget(ns, target, pool) {
 
   while (!targetPrepared(ns, target)) {
     await runBatch(ns, tasks);
-    ns.tprintf("  done, sleeping");
+    // ns.tprintf("  done, sleeping for %dms", batchBufferMS);
     await ns.sleep(batchBufferMS);
   }
 }
 
 /** @param {NS} ns **/
 async function hackTarget(ns, target, pool) {
-  ns.tprintf("T1M3 7O H4CK");
-
   const growMS = ns.getGrowTime(target);
   const weakMS = ns.getWeakenTime(target);
   const hackMS = ns.getHackTime(target);
@@ -152,16 +155,16 @@ async function hackTarget(ns, target, pool) {
   );
   const hotMS = 4 * bufferMS;
   let concurrentBatches = Math.ceil(batchMS / hotMS);
-  ns.tprintf("grow time is %dms", growMS);
-  ns.tprintf("weaken time is %dms", weakMS);
-  ns.tprintf("hack time is %dms", hackMS);
-  ns.tprintf("batch time (WGWH) is %fs total, %dms hot (%f%% hot)", (batchMS / 1000.0).toFixed(3), hotMS, (100 * hotMS / batchMS).toFixed(2));
-  ns.tprintf("I want to run %d batches at once (%d helpers)", concurrentBatches, 4 * concurrentBatches);
-  let batchBufferMS = 0;
+  // ns.tprintf("grow time is %dms", growMS);
+  // ns.tprintf("weaken time is %dms", weakMS);
+  // ns.tprintf("hack time is %dms", hackMS);
+  // ns.tprintf("batch time (WGWH) is %fs total, %dms hot (%f%% hot)", (batchMS / 1000.0).toFixed(3), hotMS, (100 * hotMS / batchMS).toFixed(2));
+  // ns.tprintf("I want to run %d batches at once (%d helpers)", concurrentBatches, 4 * concurrentBatches);
+  let batchBufferMS = minBatchBufferMS;
   if (4 * concurrentBatches > pool.length) {
     concurrentBatches = Math.floor(pool.length / 4);
     batchBufferMS = Math.ceil(batchMS / concurrentBatches);
-    ns.tprintf("Since I only have %d helpers (%d max concurrent batches), I have to set the inter-batch buffer to %dms", pool.length, concurrentBatches, batchBufferMS);
+    // ns.tprintf("Since I only have %d helpers (%d max concurrent batches), I have to set the inter-batch buffer to %dms", pool.length, concurrentBatches, batchBufferMS);
   }
   const tasks = [
     {
@@ -185,10 +188,10 @@ async function hackTarget(ns, target, pool) {
       "target": target
     }
   ]
-  ns.tprintf("batch configured");
+  // ns.tprintf("batch configured");
 
   await runBatch(ns, tasks);
-  ns.tprintf("  done, sleeping");
+  // ns.tprintf("  done, sleeping");
   await ns.sleep(batchBufferMS);
 }
 
@@ -196,12 +199,12 @@ async function hackTarget(ns, target, pool) {
 async function runBatch(ns, tasks) {
   for (let i = 0; i < tasks.length; i++) {
     const task = tasks[i];
-    ns.tprintf("  running %s on %s after %dms", task.verb, task.target, task.delayMS);
+    // ns.tprintf("  running %s on %s after %dms", task.verb, task.target, task.delayMS);
     let written = false;
     while (!written) {
-      written = await ns.tryWritePort(portToUse, ["" + task.delayMS, task.verb, task.target].join(" "));
+      written = await ns.tryWritePort(botPort, ["" + task.delayMS, task.verb, task.target].join(" "));
       if (!written) {
-        ns.toast(ns.sprintf("port %d full, waiting %dms", portToUse, portFullWaitMS));
+        ns.toast(ns.sprintf("port %d full, waiting %dms", botPort, portFullWaitMS));
         await ns.sleep(portFullWaitMS);
       }
     }
@@ -217,8 +220,8 @@ function targetPrepared(ns, target) {
   const currentSecLevel = ns.getServerSecurityLevel(target);
   const serverMoney = ns.getServerMoneyAvailable(target);
 
-  ns.tprintf("Current money is %s (max %s)", formatMoney(serverMoney), formatMoney(serverMaxMoney));
-  ns.tprintf("Security level is %d (min %d)", currentSecLevel, minSecLevel);
+  // ns.tprintf("Current money is %s (max %s)", formatMoney(serverMoney), formatMoney(serverMaxMoney));
+  // ns.tprintf("Security level is %d (min %d)", currentSecLevel, minSecLevel);
 
   return currentSecLevel <= securityThreshold && serverMoney >= moneyThreshold
 }
