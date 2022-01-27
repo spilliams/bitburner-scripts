@@ -13,7 +13,7 @@ const toastOnPortFull = false;
 
 const botPort = 1;
 const helperPayload = "4.js";
-const maxBotsPerHost = 40;
+const maxBotsPerHost = 50;
 const useOnlyPurchasedServers = true;
 const fillBotServer = true; // whether to maximize each bot server (run payload multi-threaded)
 const takeItWaitMS = 50; // time bw bot spinups (many bots per host)

@@ -5,7 +5,7 @@ import { scanAll } from "util_recurse.js";
 // for every connection on it, copies this script to it, runs it.
 
 // if we find a server with stuff running on it that isn't the script we want, kill all that stuff
-const killAllRunning = true;
+const killAllRunning = false;
 
 /** @param {NS} ns **/
 export async function main(ns) {

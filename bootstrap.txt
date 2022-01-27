@@ -1,9 +1,8 @@
-# find targets
-# hit the best target
-# go to university to study CS
-# update which target you hit based on hacking level
-# when you reach hacking 50, stop school and do something else
-
-# purchase TOR router
-# start buying up port scripts
-# for each port script bought, re-infect to get more servers on board
+new instance?
+start studying computers at a local university.
+`run target.js` and `run infect.js 2.js <target>` to get early money.
+Once you have a bit of money (maybe need ports open for this),
+`run buy-upgrade 2.js <target>` to build some purchased servers.
+Once you have some good servers, `run orch.js <target>` to hit a single
+target in an orchestrated way. You can use this alongside
+`run 2.js <target2> -t <n>` and `run infect.js 2.js <target3>`
