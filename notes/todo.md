@@ -7,6 +7,7 @@
 
 # Future Ideas
 
+- finish contracts
 - script joining factions / buying augs
 - script buying Tor and port-busters
 - script a backdoor
