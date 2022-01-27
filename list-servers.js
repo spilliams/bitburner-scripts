@@ -1,5 +1,4 @@
-import { formatMoney } from "util_formatMoney.js";
-import { formatMem } from "util_formatMem.js";
+import { formatMoney, formatMem } from "util_format.js";
 
 // lists purchased servers, and their maximum RAM
 

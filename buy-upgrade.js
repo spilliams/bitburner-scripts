@@ -1,4 +1,4 @@
-import { formatMem } from "util_formatMem.js";
+import { formatMem } from "util_format.js";
 
 // if you don't yet have max servers, it spins up
 // new 4gb servers.

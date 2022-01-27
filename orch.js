@@ -1,5 +1,5 @@
 import { getNumPortScriptsAvailable } from "target.js";
-import { formatMoney } from "util_formatMoney.js";
+import { formatMoney, formatNow } from "util_format.js";
 import { scanAll } from "util_recurse.js";
 import { breakIt } from "infect.js";
 
@@ -213,7 +213,9 @@ async function runBatch(ns, tasks) {
     while (!written) {
       written = await ns.tryWritePort(botPort, ["" + task.delayMS, task.verb, task.target].join(" "));
       if (!written) {
-        if (toastOnPortFull) ns.toast(ns.sprintf("port %d full, waiting %dms", botPort, portFullWaitMS), "warning", portFullWaitMS);
+        const msg = ns.sprintf("%s: port %d full, waiting %dms", formatNow(), botPort, portFullWaitMS)
+        if (toastOnPortFull) ns.toast(msg, "warning", portFullWaitMS);
+        ns.print(msg);
         await ns.sleep(portFullWaitMS);
       }
     }
