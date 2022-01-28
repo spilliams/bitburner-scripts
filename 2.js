@@ -23,7 +23,7 @@ export async function main(ns) {
     }
     let serverMoney = ns.getServerMoneyAvailable(target);
     if (serverMoney < minMoney) {
-      ns.print("server money is ", formatMoney(serverMoney), " (under threshold ", formatMoney(moneyThreshold), "). growing");
+      ns.print("server money is ", formatMoney(serverMoney), " (under threshold ", formatMoney(minMoney), "). growing");
       await ns.grow(target);
       if (toasty) ns.toast(ns.sprintf("%s: grow %s complete", hostname, target));
       continue;
