@@ -29,6 +29,7 @@ const defaultSettings = {
   "fillBotServer": false, // whether to maximize each bot server (run payload multi-threaded)
   "helperPayload": "4.js",
   "helperPayloadAddlArgs": [],
+  "killRunningBots": false,
   "maxBotsPerHost": 32,
   "minBatchBufferMS": 100, // min time between batches
   "portFullWaitMS": 2000,
@@ -119,7 +120,9 @@ async function setupHelperPool(ns, servers, settings) {
 /** @param {NS} ns **/
 /** @return Whether it executed the payload on the host **/
 async function takeIt(ns, host, payload, settings, args = []) {
-  await ns.killall(host);
+  if (settings.killRunningBots) {
+    await ns.killall(host);
+  }
   const availableRAM = ns.getServerMaxRam(host) - ns.getServerUsedRam(host); // 16 = 16 - 0
   const availableThreads = Math.floor(availableRAM / ns.getScriptRam(payload)); // 8 = 16 / 2
   const numBots = Math.min(availableThreads, settings.maxBotsPerHost); // min(8, )

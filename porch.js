@@ -10,7 +10,9 @@ export async function main(ns) {
   let settings = {
     "botPort": 2,
     "fillBotServer": true, // whether to maximize each bot server (run payload multi-threaded)
-    "maxBotsPerHost": 1,
+    "maxBotsPerHost": 64,
+    "minBatchBufferMS": 5000,
+    "predictiveBatchTiming": true,
     "useHomeServer": false,
     "useOtherServers": false,
     "usePurchasedServers": true
