@@ -55,7 +55,7 @@ async function buyServer(ns, hostname, payload, args) {
 
   hostname = ns.purchaseServer(hostname, ram);
 
-  await runPayload(ns, hostname, ram, payload, args);
+  await runPayload(ns, hostname, payload, args);
 }
 
 /** @param {NS} ns **/

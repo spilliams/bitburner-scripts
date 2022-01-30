@@ -1,0 +1,198 @@
+digraph dep {
+  subgraph cluster_0 {
+    label="2.js"
+    "2.js/main" [label="main"]
+    "2.js/formatMoney" [label="formatMoney"]
+    "2.js/main" -> "2.js/formatMoney"
+  }
+
+  subgraph cluster_1 {
+    label="3.js"
+    "3.js/main" [label="main"]
+  }
+
+  subgraph cluster_2 {
+    label="4.js"
+    "4.js/main" [label="main"]
+  }
+
+  subgraph cluster_3 {
+    label="alias.js"
+    "alias.js/main" [label="main"]
+    "alias.js/buildMap" [label="buildMap"]
+    "alias.js/main" -> "alias.js/buildMap"
+  }
+
+  subgraph cluster_4 {
+    label="util_format.js"
+
+    "util_format.js/main" [label="main"]
+    "util_format.js/formatMoney" [label="formatMoney"]
+    "util_format.js/formatMem" [label="formatMem"]
+    "util_format.js/formatNow" [label="formatNow"]
+    "util_format.js/formatTime" [label="formatTime"]
+
+    "util_format.js/formatNow" -> "util_format.js/formatTime"
+  }
+
+  subgraph cluster_5 {
+    label="util_recurse.js"
+
+    "util_recurse.js/main" [label="main"]
+    "util_recurse.js/scanAll" [label="scanAll"]
+
+    "util_recurse.js/main" -> "util_recurse.js/scanAll"
+  }
+
+  subgraph cluster_6 {
+    label="backdoor.js"
+
+    "backdoor.js/main"
+  }
+  "backdoor.js/main" -> "util_recurse.js/scanAll"
+
+  subgraph cluster_7 {
+    label="buy_upgrade.js"
+
+    "buy_upgrade.js/main" [label="main"]
+    "buy_upgrade.js/buyServer" [label="buyServer"]
+    "buy_upgrade.js/upgradeServer" [label="upgradeServer"]
+    "buy_upgrade.js/runPayload" [label="runPayload", style=bold, color=red]
+    "buy_upgrade.js/runPayloadBots" [label="runPayloadBots"]
+
+    "buy_upgrade.js/main" -> "buy_upgrade.js/buyServer" -> "buy_upgrade.js/runPayload" -> "buy_upgrade.js/runPayloadBots"
+    "buy_upgrade.js/main" -> "buy_upgrade.js/upgradeServer" -> "buy_upgrade.js/runPayload"
+  }
+  "buy_upgrade.js/upgradeServer" -> "util_format.js/formatMem"
+
+  subgraph cluster_8 {
+    label="contracts.js"
+
+    "lots I didn't graph here"
+  }
+
+  subgraph cluster_9 {
+    label="dark.js"
+    "dark.js/main" [label="main"]
+  }
+
+  subgraph cluster_10 {
+    label="hkill.js"
+    "hkill.js/main" [label="main"]
+  }
+
+  subgraph cluster_11 {
+    label="home-bot.js"
+    "home-bot.js/main" [label="main"]
+    "home-bot.js/pad" [label="pad", style=bold, color=blue]
+    "home-bot.js/main" -> "home-bot.js/pad"
+  }
+
+  subgraph cluster_12 {
+    label="orch.js"
+    "orch.js/main" [label="main"]
+    "orch.js/orchestrate" [label="orchestrate"]
+    "orch.js/targetValid" [label="targetValid"]
+    "orch.js/setupHelperPool" [label="setupHelperPool"]
+    "orch.js/takeIt" [label="takeIt", style=bold, color=red]
+    "orch.js/prepareTarget" [label="prepareTarget"]
+    "orch.js/hackTarget" [label="hackTarget"]
+    "orch.js/runBatch" [label="runBatch"]
+    "orch.js/targetPrepared" [label="targetPrepared"]
+    "orch.js/pad" [label="pad", style=bold, color=blue]
+
+    "orch.js/main" -> "orch.js/orchestrate"
+    "orch.js/orchestrate" -> "orch.js/targetValid"
+    "orch.js/orchestrate" -> "orch.js/setupHelperPool"
+    "orch.js/orchestrate" -> "orch.js/prepareTarget"
+    "orch.js/orchestrate" -> "orch.js/hackTarget"
+    "orch.js/prepareTarget" -> "orch.js/targetPrepared"
+    "orch.js/prepareTarget" -> "orch.js/runBatch"
+    "orch.js/hackTarget" -> "orch.js/runBatch"
+    "orch.js/setupHelperPool" -> "orch.js/takeIt" -> "orch.js/pad"
+  }
+  "orch.js/targetValid" -> "target.js/getNumPortScriptsAvailable"
+  "orch.js/targetValid" -> "infect.js/breakIt"
+  "orch.js/setupHelperPool" -> "infect.js/breakIt"
+  "orch.js/orchestrate" -> "util_recurse.js/scanAll"
+  "orch.js/runBatch" -> "util_format.js/formatNow"
+
+  subgraph cluster_13 {
+    label="horch.js"
+    "horch.js/main" [label="main"]
+  }
+  "horch.js/main" -> "orch.js/orchestrate"
+
+  subgraph cluster_14 {
+    label="infect.js"
+    "infect.js/main" [label="main"]
+    "infect.js/breakIt" [label="breakIt"]
+    "infect.js/cleanIt" [label="cleanIt"]
+    "infect.js/takeIt" [label="takeIt", style=bold, color=red]
+
+    "infect.js/main" -> "infect.js/breakIt"
+    "infect.js/main" -> "infect.js/cleanIt"
+    "infect.js/main" -> "infect.js/takeIt"
+  }
+  "infect.js/main" -> "util_recurse.js/scanAll"
+
+  subgraph cluster_15 {
+    label="target.js"
+    "target.js/main" [label="main"]
+    "target.js/getNumPortScriptsAvailable" [label="getNumPortScriptsAvailable"]
+    "target.js/topTargets" [label="topTargets"]
+    "target.js/cmpHackable" [label="cmpHackable"]
+    "target.js/cmpUnhackable" [label="cmpUnhackable"]
+    "target.js/printServers" [label="printServers"]
+    "target.js/printHackable" [label="printHackable"]
+    "target.js/printUnhackable" [label="printUnhackable"]
+
+    "target.js/main" -> "target.js/topTargets"
+    "target.js/topTargets" -> "target.js/getNumPortScriptsAvailable"
+    "target.js/topTargets" -> "target.js/cmpHackable"
+    "target.js/topTargets" -> "target.js/cmpUnhackable"
+
+    "target.js/main" -> "target.js/printServers"
+    "target.js/main" -> "target.js/printHackable"
+    "target.js/main" -> "target.js/printUnhackable"
+  }
+  "target.js/main" -> "util_recurse.js/scanAll"
+
+  subgraph cluster_16 {
+    label="info.js"
+    "info.js/main" [label="main"]
+    "info.js/pad" [label="pad", style=bold, color=blue]
+    "info.js/main" -> "info.js/pad"
+  }
+  "info.js/main" -> "target.js/getNumPortScriptsAvailable"
+
+  subgraph cluster_17 {
+    label="kill.js"
+    "kill.js/main" [label="main"]
+  }
+  "kill.js/main" -> "util_recurse.js/scanAll"
+
+  subgraph cluster_18 {
+    label="list-servers.js"
+    "list-servers.js/main" [label="main"]
+  }
+  "list-servers.js/main" -> "util_format.js/formatMoney"
+  "list-servers.js/main" -> "util_format.js/formatMem"
+
+  subgraph cluster_19 {
+    label="ls-all.js"
+    "ls-all.js/main" [label="main"]
+  }
+  "ls-all.js/main" -> "util_recurse.js/scanAll"
+
+  subgraph cluster_20 {
+    label="porch.js"
+    "porch.js/main" [label="main"]
+  }
+  "porch.js/main" -> "orch.js/orchestrate"
+
+  subgraph cluster_21 {
+    label="share.js"
+    "share.js/main" [label="main"]
+  }
+}
