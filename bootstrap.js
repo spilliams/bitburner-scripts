@@ -52,6 +52,15 @@ async function writePrograms(ns) {
       await ns.sleep(10000);
     }
     ns.createProgram(pgm.name, false);
-    // TODO trigger reorchestrate
+    while (ns.isBusy()) {
+      await ns.sleep(10000);
+    }
+    // await reorchestrate(ns);
   }
 }
+
+/** @param {NS} ns **/
+// async function reorchestrate(ns) {
+//   ns.kill("orch.js");
+//   ns.exec("")
+// }
