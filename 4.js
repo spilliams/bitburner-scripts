@@ -7,6 +7,7 @@
 // 3. (optional) make it toasty
 
 const toastMS = 800;
+const debugPort = 20;
 
 /** @param {NS} ns **/
 export async function main(ns) {
@@ -16,6 +17,12 @@ export async function main(ns) {
   if (ns.args.length > 2) toasty = true;
 
   while (true) {
+    const debug = ns.peek(debugPort);
+    if (debug === 1) {
+      toasty = true;
+    } else if (debug === 0) {
+      toasty = false;
+    }
     const job = ns.readPort(port);
     if (job !== "NULL PORT DATA") {
       if (toasty) ns.toast(ns.sprintf("%s: %s", id, job), "info", toastMS);
