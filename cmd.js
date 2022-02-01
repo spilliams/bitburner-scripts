@@ -16,4 +16,5 @@ export async function main(ns) {
   ns.tprintf("alias peek=\"run portPeek.js\";");
   ns.tprintf("alias write=\"run portWrite.js\";");
   ns.tprintf("alias share=\"run share.js\";");
+  ns.tprintf("alias target=\"run target.js\";");
 }
