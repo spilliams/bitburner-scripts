@@ -30,15 +30,15 @@ async function study(ns) {
 /** @param {NS} ns **/
 async function writePrograms(ns) {
   const programs = [
+    // { "name": "AutoLink.exe", "hack": 25},
     { "name": "BruteSSH.exe", "hack": 50 },
+    // { "name": "DeepscanV1.exe", "hack": 75},
+    // { "name": "ServerProfiler.exe", "hack": 75},
     { "name": "FTPCrack.exe", "hack": 100 },
     { "name": "relaySMTP.exe", "hack": 250 },
     { "name": "HTTPWorm.exe", "hack": 500 },
-    { "name": "SQLInject.exe", "hack": 750 },
-    // "DeepscanV1.exe": 75,
-    // "DeepscanV2.exe": 400,
-    // "ServerProfiler.exe": 75,
-    // "AutoLink.exe": 25
+    // { "name": "DeepscanV2.exe", "hack": 400},
+    { "name": "SQLInject.exe", "hack": 750 }
   ];
   for (let i = 0; i < programs.length; i++) {
     const pgm = programs[i];
@@ -52,9 +52,13 @@ async function writePrograms(ns) {
       await ns.sleep(10000);
     }
     ns.createProgram(pgm.name, false);
-    while (ns.isBusy()) {
+    // as long as we're still working on it,
+    // and as long as we haven't bought the program through Tor,
+    // keep working.
+    while (ns.isBusy() && !ns.fileExists(pgm.name, "home")) {
       await ns.sleep(10000);
     }
+
     // await reorchestrate(ns);
   }
 }
