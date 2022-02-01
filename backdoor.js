@@ -18,16 +18,20 @@ export async function main(ns) {
 
 /** @param {NS} ns **/
 async function backdoor(ns, host) {
-  if (!ns.hasRootAccess(host)) {
-    let broken = await breakIt(ns, host);
-    if (!broken) return false;
-  }
-
   const hackReqd = ns.getServerRequiredHackingLevel(host);
   if (ns.getHackingLevel() < hackReqd) {
     ns.tprintf("can't backdoor %s until hou have %d hacking", host, hackReqd);
     return false;
   }
+
+  if (!ns.hasRootAccess(host)) {
+    let broken = await breakIt(ns, host);
+    if (!broken) {
+      ns.tprintf("can't break %s", host);
+      return false;
+    }
+  }
+
   await ns.installBackdoor(host);
   ns.tprintf("backdoored %s", host);
   return true;
