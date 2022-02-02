@@ -1,3 +1,5 @@
+import { pad } from "util_format.js";
+
 /** @param {NS} ns **/
 export async function main(ns) {
   // const data = [[8, 11], [11, 12], [25, 30], [10, 13], [13, 21], [25, 30]];
@@ -33,7 +35,7 @@ export function mergeOverlappingIntervals(ns, data) {
     for (let j = mergeStart; j <= mergeEnd; j++) {
       merged[j] = "1";
     }
-    ns.tprintf("+[%s,%s] = %s", pad(interval[0], 2), pad(interval[1], 2), merged.join(""));
+    ns.tprintf("+[%s,%s] = %s", pad(interval[0], 2, "0"), pad(interval[1], 2, "0"), merged.join(""));
   }
 
   const mergeStr = "0" + merged.join("") + "0";
@@ -52,10 +54,4 @@ export function mergeOverlappingIntervals(ns, data) {
     }
   }
   return intervals;
-}
-
-function pad(num, len, char = "0") {
-  let str = "" + num;
-  while (str.length < len) str = char + str;
-  return str;
 }

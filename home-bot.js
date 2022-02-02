@@ -1,3 +1,5 @@
+import { pad } from "util_format.js";
+
 const slushGB = 128;
 const payload = "4.js";
 
@@ -30,10 +32,4 @@ export async function main(ns) {
     ns.tprintf("cp %s %s; run %s -t %d %v;", payload, name, name, numThreadsPerBot, ns.args.slice(1));
     // ns.exec(name, "home", parseInt(ns.args[0]), ...ns.args.slice(1));
   }
-}
-
-function pad(num, len, char = " ") {
-  let str = "" + num;
-  while (str.length < len) str = char + str;
-  return str;
 }

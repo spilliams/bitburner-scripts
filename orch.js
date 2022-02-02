@@ -2,6 +2,7 @@ import { getNumPortScriptsAvailable } from "target.js";
 import { formatMoney, formatNow } from "util_format.js";
 import { scanAll } from "util_recurse.js";
 import { breakIt } from "infect.js";
+import { pad } from "util_format.js";
 
 // args:
 // 1. target
@@ -131,7 +132,7 @@ async function takeIt(ns, host, payload, settings, args = []) {
   const suffixLen = Math.ceil(Math.log10(numBots));
   for (let i = 0; i < numBots; i++) {
     await ns.scp(payload, "home", host);
-    let newName = payload.split(".")[0] + "-" + pad(i, suffixLen) + "." + payload.split(".")[1];
+    let newName = payload.split(".")[0] + "-" + pad(i, suffixLen, "0") + "." + payload.split(".")[1];
     ns.mv(host, payload, newName);
     ns.exec(newName, host, threadsPerBot, ...args);
     await ns.sleep(settings.takeItWaitMS);
@@ -266,10 +267,4 @@ function targetPrepared(ns, target) {
   // ns.tprintf("Security level is %d (min %d)", currentSecLevel, minSecLevel);
 
   return currentSecLevel <= securityThreshold && serverMoney >= moneyThreshold
-}
-
-function pad(num, len, char = "0") {
-  let str = "" + num;
-  while (str.length < len) str = char + str;
-  return str;
 }

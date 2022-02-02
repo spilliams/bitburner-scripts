@@ -1,3 +1,5 @@
+import { pad } from "util_format.js";
+
 /** @param {NS} ns **/
 export async function main(ns) {
   // 62,40,17,163,22,105,159,50,10,140,172,157,163
@@ -117,10 +119,4 @@ function transpose(arr) {
   }
 
   return tx;
-}
-
-function pad(num, len, char = " ") {
-  let str = "" + num;
-  while (str.length < len) str = char + str;
-  return str;
 }

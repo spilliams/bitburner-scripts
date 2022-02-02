@@ -1,3 +1,5 @@
+import { pad } from "util_format.js";
+
 /** @param {NS} ns **/
 export async function main(ns) {
   // ns.tprintf("%d paths", uniquePathsInAGrid1(ns, [5, 11]));
@@ -132,10 +134,4 @@ function sprintGrid(data) {
   }
 
   return lines.join("\n");
-}
-
-function pad(num, len, char = " ") {
-  let str = "" + num;
-  while (str.length < len) str = char + str;
-  return str;
 }

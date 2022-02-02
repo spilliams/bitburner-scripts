@@ -1,5 +1,6 @@
 import { formatMoney } from "util_format.js";
 import { getNumPortScriptsAvailable } from "target.js";
+import { pad } from "util_format.js";
 
 /** @param {NS} ns **/
 export async function main(ns) {
@@ -38,10 +39,4 @@ export async function main(ns) {
   ns.tprintf("grow time is   %sms", pad(growMS, maxTimeLength));
   ns.tprintf("weaken time is %sms", pad(weakMS, maxTimeLength));
   ns.tprintf("hack time is   %sms", pad(hackMS, maxTimeLength));
-}
-
-function pad(num, len, char = " ") {
-  let str = "" + num;
-  while (str.length < len) str = char + str;
-  return str;
 }
