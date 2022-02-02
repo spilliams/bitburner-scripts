@@ -13,7 +13,13 @@ export async function main(ns) {
     // await resetPayload();
   }
 
-  const utilPrograms = ["ServerProfiler.exe", "DeepscanV1.exe", "DeepscanV2.exe", "AutoLink.exe", "Formulas.exe"];
+  const utilPrograms = [
+    "AutoLink.exe",
+    // "Formulas.exe",
+    "ServerProfiler.exe",
+    "DeepscanV1.exe",
+    "DeepscanV2.exe",
+  ];
   for (let i = 0; i < utilPrograms.length; i++) {
     await purchase(ns, utilPrograms[i]);
   }
