@@ -27,8 +27,10 @@ async function backdoor(ns, host) {
   const hackReqd = ns.getServerRequiredHackingLevel(host);
   let printed = false;
   while (ns.getHackingLevel() < hackReqd) {
-    ns.tail();
-    if (!printed) ns.print(ns.sprintf("can't backdoor %s until you have %d hacking. waiting", host, hackReqd));
+    if (!printed) {
+      ns.tail();
+      ns.print(ns.sprintf("can't backdoor %s until you have %d hacking. waiting", host, hackReqd));
+    }
     printed = true;
     await ns.sleep(10000);
   }
@@ -37,8 +39,10 @@ async function backdoor(ns, host) {
     const bustersReqd = ns.getServerNumPortsRequired();
     printed = false;
     while (getNumPortScriptsAvailable(ns) < bustersReqd) {
-      ns.tail();
-      if (!printed) ns.print(ns.sprintf("waiting until we have %d port-busters", bustersReqd));
+      if (!printed) {
+        ns.tail();
+        ns.print(ns.sprintf("waiting until we have %d port-busters", bustersReqd));
+      }
       printed = true;
       await ns.sleep(10000);
     }
