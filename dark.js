@@ -1,11 +1,9 @@
 /** @param {NS} ns **/
 export async function main(ns) {
+  while (ns.getServerMoneyAvailable("home") * .1 < 200000) {
+    await ns.sleep(5000);
+  }
   ns.purchaseTor();
-  // TODO purchaseTor returns false if we already bought it
-  // while (!purchased) {
-  //   await ns.sleep(30000);
-  //   purchased = ns.purchaseTor();
-  // }
 
   const portPrograms = ["BruteSSH.exe", "FTPCrack.exe", "relaySMTP.exe", "HTTPWorm.exe", "SQLInject.exe"];
   for (let i = 0; i < portPrograms.length; i++) {
