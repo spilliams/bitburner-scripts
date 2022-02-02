@@ -4,67 +4,36 @@ export async function main(ns) {
   ns.disableLog("getHackingLevel");
   ns.tail();
 
-  // run alias.js
   // run cmd.js
 
   await study(ns);
-  // once hack is 10, start orchestration
+  while (ns.getHackingLevel() < 20) {
+    await ns.sleep(1000);
+  }
+  await reorchestrate(ns);
 
-  // start dark
-  // start upbuy
+  ns.exec("dark.js", "home")
+  ns.exec("buy-upgrade.js", "home", 1, "4.js", 2);
+  ns.exec("write-programs.js");
+  ns.exec("backdoor.js");
   // TODO: start hacknet
-
-  await writePrograms(ns);
+  // TODO: start home-improvement
 
   // every milestone (?) re-orchestrate. milestones are:
   // - enough hack level for a new target. Must be a significant new target?
-  // - we bought a new port buster
+  // - we have a new port buster (bought or made)
 }
 
 /** @param {NS} ns **/
 async function study(ns) {
-  // TODO: calculate best course to take givne current hacknet income
+  // TODO: calculate best course to take given current passive income
   await ns.universityCourse("rothman university", "Study Computer Science", false);
 }
 
 /** @param {NS} ns **/
-async function writePrograms(ns) {
-  const programs = [
-    // { "name": "AutoLink.exe", "hack": 25},
-    { "name": "BruteSSH.exe", "hack": 50 },
-    // { "name": "DeepscanV1.exe", "hack": 75},
-    // { "name": "ServerProfiler.exe", "hack": 75},
-    { "name": "FTPCrack.exe", "hack": 100 },
-    { "name": "relaySMTP.exe", "hack": 250 },
-    { "name": "HTTPWorm.exe", "hack": 500 },
-    // { "name": "DeepscanV2.exe", "hack": 400},
-    { "name": "SQLInject.exe", "hack": 750 }
-  ];
-  for (let i = 0; i < programs.length; i++) {
-    const pgm = programs[i];
-    if (ns.fileExists(pgm.name, "home")) continue;
-
-    await study(ns);
-    let printed = false;
-    while (ns.getHackingLevel() < pgm.hack) {
-      if (!printed) ns.print(ns.sprintf("studying to level %d before we can write %s", pgm.hack, pgm.name));
-      printed = true;
-      await ns.sleep(10000);
-    }
-    ns.createProgram(pgm.name, false);
-    // as long as we're still working on it,
-    // and as long as we haven't bought the program through Tor,
-    // keep working.
-    while (ns.isBusy() && !ns.fileExists(pgm.name, "home")) {
-      await ns.sleep(10000);
-    }
-
-    // await reorchestrate(ns);
-  }
+async function reorchestrate(ns) {
+  // ns.kill("orch.js");
+  // ns.exec("orch.js", "home", 1, oTarget);
+  // ns.kill("porch.js");
+  // ns.exec("porch.js", "home", 1, pTarget);
 }
-
-/** @param {NS} ns **/
-// async function reorchestrate(ns) {
-//   ns.kill("orch.js");
-//   ns.exec("")
-// }
