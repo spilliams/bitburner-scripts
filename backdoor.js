@@ -5,6 +5,10 @@ import { getNumPortScriptsAvailable } from "target.js";
 
 /** @param {NS} ns **/
 export async function main(ns) {
+  ns.disableLog("sleep");
+  ns.disableLog("getHackingLevel");
+  ns.disableLog("scan");
+
   // const servers = scanAll(ns);
   const servers = ["CSEC", "avmnite-02h", "I.I.I.I", "run4theh111z"]
   let count = 0;
