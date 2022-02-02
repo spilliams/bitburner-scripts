@@ -1,5 +1,9 @@
 /** @param {NS} ns **/
 export async function main(ns) {
+  ns.disableLog("sleep");
+  ns.disableLog("getHackingLevel");
+  ns.tail();
+
   const programs = [
     // { "name": "AutoLink.exe", "hack": 25},
     { "name": "BruteSSH.exe", "hack": 50 },

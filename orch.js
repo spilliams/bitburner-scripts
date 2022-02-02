@@ -44,6 +44,13 @@ const defaultSettings = {
 
 /** @param {NS} ns **/
 export async function orchestrate(ns, target, cfg = {}) {
+  ns.disableLog("getServerMaxMoney");
+  ns.disableLog("getServerMinSecurityLevel");
+  ns.disableLog("getServerSecurityLevel");
+  ns.disableLog("getServerMoneyAvailable");
+  ns.disableLog("sleep");
+  ns.tail();
+
   const settings = { ...defaultSettings, ...cfg };
 
   // first, make sure I can hack it
@@ -247,7 +254,7 @@ async function runBatch(ns, tasks, settings) {
       if (!written) {
         const msg = ns.sprintf("%s: port %d full, waiting %dms", formatNow(), settings.botPort, settings.portFullWaitMS)
         if (settings.toasty) ns.toast(msg, "warning", settings.portFullWaitMS);
-        ns.print(msg);
+        // if (debug) ns.print(msg);
         await ns.sleep(settings.portFullWaitMS);
       }
     }

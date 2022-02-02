@@ -1,5 +1,6 @@
 /** @param {NS} ns **/
 export async function main(ns) {
+  ns.disableLog("disableLog");
   ns.disableLog("sleep");
   ns.disableLog("getHackingLevel");
   ns.tail();

@@ -23,7 +23,7 @@ export function topTargets(ns) {
   // funnel: scanning, queued, vetted, reach
   const scanning = scanAll(ns);
 
-  ns.tprintf("done! scanned %d servers", scanning.length);
+  // ns.tprintf("done! scanned %d servers", scanning.length);
   // ns.tprint(scanning);
 
   const portScriptsAvailable = getNumPortScriptsAvailable(ns);

@@ -15,6 +15,11 @@ const maxBotsPerHost = 64;
 
 /** @param {NS} ns **/
 export async function main(ns) {
+  ns.disableLog("sleep");
+  ns.disableLog("getServerMoneyAvailable");
+  ns.disableLog("scp");
+  ns.disableLog("exec");
+
   let payload = "";
   let args = [];
   if (ns.args.length > 0) payload = ns.args[0];
@@ -46,8 +51,10 @@ async function buyServer(ns, hostname, payload, args) {
 
   let money = ns.getServerMoneyAvailable("home");
   let cost = ns.getPurchasedServerCost(ram);
-
+  let printed = false;
   while (money * threshold < cost) {
+    if (!printed) ns.print(ns.sprintf("waiting until you have %d money (spending %d%% to buy server %s)", cost / threshold, threshold * 100, hostname));
+    printed = true;
     await ns.sleep(10000);
     money = ns.getServerMoneyAvailable("home");
     cost = ns.getPurchasedServerCost(ram);
@@ -67,8 +74,13 @@ async function upgradeServer(ns, hostname, payload, args) {
     return false;
   }
   let cost = ns.getPurchasedServerCost(newRAM);
-  while (ns.getServerMoneyAvailable("home") * threshold < cost) {
+  let printed = false
+  let money = ns.getServerMoneyAvailable("home");
+  while (money * threshold < cost) {
+    if (!printed) ns.print(ns.sprintf("waiting until you have %d money (spending %d%% to upgrade server %s)", cost / threshold, threshold * 100, hostname));
+    printed = true;
     await ns.sleep(30000);
+    money = ns.getServerMoneyAvailable("home");
   }
   ns.toast(ns.sprintf("upgrading %s to %s", hostname, formatMem(newRAM)), "info");
   ns.killall(hostname);

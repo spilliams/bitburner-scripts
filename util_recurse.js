@@ -7,6 +7,8 @@ export async function main(ns) {
 /** @param {NS} ns **/
 /** @return A list of hostnames */
 export function scanAll(ns) {
+  ns.disableLog("scan");
+
   let scanning = ["home"];
   let scannedAll = false;
 
