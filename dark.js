@@ -10,7 +10,6 @@ export async function main(ns) {
   const portPrograms = ["BruteSSH.exe", "FTPCrack.exe", "relaySMTP.exe", "HTTPWorm.exe", "SQLInject.exe"];
   for (let i = 0; i < portPrograms.length; i++) {
     await purchase(ns, portPrograms[i]);
-    // await resetPayload();
   }
 
   const utilPrograms = [
