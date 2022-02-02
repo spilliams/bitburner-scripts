@@ -15,7 +15,9 @@ export async function main(ns) {
     return;
   }
   const target = ns.args[0];
-  let settings = {}
+  let settings = {
+    "maxBotsPerHost": 1000
+  };
   if (ns.args.length > 1) {
     settings["toasty"] = true;
     settings["helperPayloadAddlArgs"] = ["toasty"];
