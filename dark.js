@@ -5,7 +5,13 @@ export async function main(ns) {
   }
   ns.purchaseTor();
 
-  const portPrograms = ["BruteSSH.exe", "FTPCrack.exe", "relaySMTP.exe", "HTTPWorm.exe", "SQLInject.exe"];
+  const portPrograms = [
+    "BruteSSH.exe",
+    "FTPCrack.exe",
+    "relaySMTP.exe",
+    "HTTPWorm.exe",
+    "SQLInject.exe"
+  ];
   for (let i = 0; i < portPrograms.length; i++) {
     await purchase(ns, portPrograms[i]);
   }
