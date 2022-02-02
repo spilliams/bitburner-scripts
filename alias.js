@@ -74,6 +74,5 @@ function buildMap(ns) {
     }
   }
 
-  ns.tprintf("done! scanned %d servers", scanning.length);
   return linkMap;
 }
