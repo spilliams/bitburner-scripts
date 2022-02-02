@@ -6,10 +6,10 @@ digraph dep {
     "2.js/main" -> "2.js/formatMoney"
   }
 
-  subgraph cluster_1 {
-    label="3.js"
-    "3.js/main" [label="main"]
-  }
+  // subgraph cluster_1 {
+  //   label="3.js"
+  //   "3.js/main" [label="main"]
+  // }
 
   subgraph cluster_2 {
     label="4.js"
@@ -19,37 +19,38 @@ digraph dep {
   subgraph cluster_3 {
     label="alias.js"
     "alias.js/main" [label="main"]
+    "alias.js/goto" [label="goto"]
+    "alias.js/printAllAliases" [label="printAllAliases"]
     "alias.js/buildMap" [label="buildMap"]
+
     "alias.js/main" -> "alias.js/buildMap"
-  }
-
-  subgraph cluster_4 {
-    label="util_format.js"
-
-    "util_format.js/main" [label="main"]
-    "util_format.js/formatMoney" [label="formatMoney"]
-    "util_format.js/formatMem" [label="formatMem"]
-    "util_format.js/formatNow" [label="formatNow"]
-    "util_format.js/formatTime" [label="formatTime"]
-
-    "util_format.js/formatNow" -> "util_format.js/formatTime"
-  }
-
-  subgraph cluster_5 {
-    label="util_recurse.js"
-
-    "util_recurse.js/main" [label="main"]
-    "util_recurse.js/scanAll" [label="scanAll"]
-
-    "util_recurse.js/main" -> "util_recurse.js/scanAll"
+    "alias.js/main" -> "alias.js/goto"
+    "alias.js/goto" -> "alias.js/buildMap"
+    "alias.js/printAllAliases" -> "alias.js/buildMap"
   }
 
   subgraph cluster_6 {
     label="backdoor.js"
 
-    "backdoor.js/main"
+    "backdoor.js/main" [label="main"]
+    "backdoor.js/backdoor" [label="backdoor"]
+
+    "backdoor.js/main" -> "backdoor.js/backdoor"
   }
-  "backdoor.js/main" -> "util_recurse.js/scanAll"
+  "backdoor.js/backdoor" -> "infect.js/breakIt"
+  "backdoor.js/backdoor" -> "alias.js/goto"
+  "backdoor.js/backdoor" -> "target.js/getNumPortScriptsAvailable"
+
+  subgraph cluster_22 {
+    label="bootstrap.js"
+
+    "bootstrap.js/main" [label="main"]
+    "bootstrap.js/study" [label="study"]
+    "bootstrap.js/reorchestrate" [label="reorchestrate"]
+
+    "bootstrap.js/main" -> "bootstrap.js/study"
+    "bootstrap.js/main" -> "bootstrap.js/reorchestrate"
+  }
 
   subgraph cluster_7 {
     label="buy_upgrade.js"
@@ -65,6 +66,13 @@ digraph dep {
   }
   "buy_upgrade.js/upgradeServer" -> "util_format.js/formatMem"
 
+  subgraph cluster_23 {
+    label="cmd.js"
+
+    "cmd.js/main"
+  }
+  // TODO: wanna graph these?
+
   subgraph cluster_8 {
     label="contracts.js"
 
@@ -73,7 +81,20 @@ digraph dep {
 
   subgraph cluster_9 {
     label="dark.js"
+
     "dark.js/main" [label="main"]
+    "dark.js/purchase" [label="purchase"]
+
+    "dark.js/main" -> "dark.js/purchase"
+  }
+
+  subgraph cluster_24 {
+    label="doCrimes.js"
+
+    "doCrimes.js/main" [label="main"]
+    "doCrimes.js/getCrimeValues" [label="getCrimeValues"]
+
+    "doCrimes.js/main" -> "doCrimes.js/getCrimeValues"
   }
 
   subgraph cluster_10 {
@@ -84,9 +105,57 @@ digraph dep {
   subgraph cluster_11 {
     label="home-bot.js"
     "home-bot.js/main" [label="main"]
-    "home-bot.js/pad" [label="pad", style=bold, color=blue]
-    "home-bot.js/main" -> "home-bot.js/pad"
   }
+  "home-bot.js/main" -> "util_format.js/pad"
+
+  subgraph cluster_13 {
+    label="horch.js"
+    "horch.js/main" [label="main"]
+  }
+  "horch.js/main" -> "orch.js/orchestrate"
+
+  subgraph cluster_14 {
+    label="infect.js"
+    "infect.js/main" [label="main"]
+    "infect.js/breakIt" [label="breakIt"]
+    "infect.js/cleanIt" [label="cleanIt"]
+    "infect.js/takeIt" [label="takeIt", style=bold, color=red]
+
+    "infect.js/main" -> "infect.js/breakIt"
+    "infect.js/main" -> "infect.js/cleanIt"
+    "infect.js/main" -> "infect.js/takeIt"
+  }
+  "infect.js/main" -> "util_recurse.js/scanAll"
+
+  subgraph cluster_16 {
+    label="info.js"
+    "info.js/main" [label="main"]
+    "info.js/main" -> "info.js/pad"
+  }
+  "info.js/main" -> "util_format.js/formatMoney"
+  "info.js/main" -> "util_format.js/pad"
+  "info.js/main" -> "target.js/getNumPortScriptsAvailable"
+
+  // todo continue with sync from here
+
+  subgraph cluster_17 {
+    label="kill.js"
+    "kill.js/main" [label="main"]
+  }
+  "kill.js/main" -> "util_recurse.js/scanAll"
+
+  subgraph cluster_18 {
+    label="list-servers.js"
+    "list-servers.js/main" [label="main"]
+  }
+  "list-servers.js/main" -> "util_format.js/formatMoney"
+  "list-servers.js/main" -> "util_format.js/formatMem"
+
+  subgraph cluster_19 {
+    label="ls-all.js"
+    "ls-all.js/main" [label="main"]
+  }
+  "ls-all.js/main" -> "util_recurse.js/scanAll"
 
   subgraph cluster_12 {
     label="orch.js"
@@ -117,25 +186,6 @@ digraph dep {
   "orch.js/orchestrate" -> "util_recurse.js/scanAll"
   "orch.js/runBatch" -> "util_format.js/formatNow"
 
-  subgraph cluster_13 {
-    label="horch.js"
-    "horch.js/main" [label="main"]
-  }
-  "horch.js/main" -> "orch.js/orchestrate"
-
-  subgraph cluster_14 {
-    label="infect.js"
-    "infect.js/main" [label="main"]
-    "infect.js/breakIt" [label="breakIt"]
-    "infect.js/cleanIt" [label="cleanIt"]
-    "infect.js/takeIt" [label="takeIt", style=bold, color=red]
-
-    "infect.js/main" -> "infect.js/breakIt"
-    "infect.js/main" -> "infect.js/cleanIt"
-    "infect.js/main" -> "infect.js/takeIt"
-  }
-  "infect.js/main" -> "util_recurse.js/scanAll"
-
   subgraph cluster_15 {
     label="target.js"
     "target.js/main" [label="main"]
@@ -158,33 +208,6 @@ digraph dep {
   }
   "target.js/main" -> "util_recurse.js/scanAll"
 
-  subgraph cluster_16 {
-    label="info.js"
-    "info.js/main" [label="main"]
-    "info.js/pad" [label="pad", style=bold, color=blue]
-    "info.js/main" -> "info.js/pad"
-  }
-  "info.js/main" -> "target.js/getNumPortScriptsAvailable"
-
-  subgraph cluster_17 {
-    label="kill.js"
-    "kill.js/main" [label="main"]
-  }
-  "kill.js/main" -> "util_recurse.js/scanAll"
-
-  subgraph cluster_18 {
-    label="list-servers.js"
-    "list-servers.js/main" [label="main"]
-  }
-  "list-servers.js/main" -> "util_format.js/formatMoney"
-  "list-servers.js/main" -> "util_format.js/formatMem"
-
-  subgraph cluster_19 {
-    label="ls-all.js"
-    "ls-all.js/main" [label="main"]
-  }
-  "ls-all.js/main" -> "util_recurse.js/scanAll"
-
   subgraph cluster_20 {
     label="porch.js"
     "porch.js/main" [label="main"]
@@ -195,4 +218,26 @@ digraph dep {
     label="share.js"
     "share.js/main" [label="main"]
   }
+
+  subgraph cluster_4 {
+    label="util_format.js"
+
+    "util_format.js/main" [label="main"]
+    "util_format.js/formatMoney" [label="formatMoney"]
+    "util_format.js/formatMem" [label="formatMem"]
+    "util_format.js/formatNow" [label="formatNow"]
+    "util_format.js/formatTime" [label="formatTime"]
+
+    "util_format.js/formatNow" -> "util_format.js/formatTime"
+  }
+
+  subgraph cluster_5 {
+    label="util_recurse.js"
+
+    "util_recurse.js/main" [label="main"]
+    "util_recurse.js/scanAll" [label="scanAll"]
+
+    "util_recurse.js/main" -> "util_recurse.js/scanAll"
+  }
+
 }

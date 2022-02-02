@@ -1,6 +1,5 @@
-import { formatMoney } from "util_format.js";
+import { formatMoney, pad } from "util_format.js";
 import { getNumPortScriptsAvailable } from "target.js";
-import { pad } from "util_format.js";
 
 /** @param {NS} ns **/
 export async function main(ns) {
