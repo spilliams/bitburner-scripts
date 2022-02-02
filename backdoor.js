@@ -1,6 +1,7 @@
 // import { scanAll } from "util_recurse.js";
 import { breakIt } from "infect.js";
 import { goto } from "alias.js";
+import { getNumPortScriptsAvailable } from "target.js";
 
 /** @param {NS} ns **/
 export async function main(ns) {
@@ -21,16 +22,28 @@ export async function main(ns) {
 /** @param {NS} ns **/
 async function backdoor(ns, host) {
   const hackReqd = ns.getServerRequiredHackingLevel(host);
-  if (ns.getHackingLevel() < hackReqd) {
-    ns.tprintf("can't backdoor %s until hou have %d hacking", host, hackReqd);
-    return false;
+  let printed = false;
+  while (ns.getHackingLevel() < hackReqd) {
+    ns.tail();
+    if (!printed) ns.print(ns.sprintf("can't backdoor %s until you have %d hacking. waiting", host, hackReqd));
+    printed = true;
+    await ns.sleep(10000);
   }
 
   if (!ns.hasRootAccess(host)) {
+    const bustersReqd = ns.getServerNumPortsRequired();
+    printed = false;
+    while (getNumPortScriptsAvailable(ns) < bustersReqd) {
+      ns.tail();
+      if (!printed) ns.print(ns.sprintf("waiting until we have %d port-busters", bustersReqd));
+      printed = true;
+      await ns.sleep(10000);
+    }
+
     let broken = await breakIt(ns, host);
     if (!broken) {
-      ns.tprintf("can't break %s", host);
-      return false;
+      ns.tail();
+      throw ns.sprintf("can't break %s", host);
     }
   }
 
