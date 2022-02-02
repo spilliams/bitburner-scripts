@@ -36,7 +36,7 @@ async function backdoor(ns, host) {
   }
 
   if (!ns.hasRootAccess(host)) {
-    const bustersReqd = ns.getServerNumPortsRequired();
+    const bustersReqd = ns.getServerNumPortsRequired(host);
     printed = false;
     while (getNumPortScriptsAvailable(ns) < bustersReqd) {
       if (!printed) {
