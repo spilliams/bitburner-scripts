@@ -1,5 +1,6 @@
 // import { scanAll } from "util_recurse.js";
 import { breakIt } from "infect.js";
+import { goto } from "alias.js";
 
 /** @param {NS} ns **/
 export async function main(ns) {
@@ -13,6 +14,7 @@ export async function main(ns) {
     if (done) count++;
   }
 
+  await goto(ns, "home");
   ns.tprintf("backdoored %d servers", count);
 }
 
@@ -32,7 +34,8 @@ async function backdoor(ns, host) {
     }
   }
 
-  await ns.installBackdoor(host);
+  await goto(ns, host);
+  await ns.installBackdoor();
   ns.tprintf("backdoored %s", host);
   return true;
 }
