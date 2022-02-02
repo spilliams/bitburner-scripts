@@ -17,5 +17,5 @@ export async function main(ns) {
   ns.tprintf("alias write=\"run portWrite.js\";");
   ns.tprintf("alias share=\"run share.js\";");
   ns.tprintf("alias target=\"run target.js\";");
-  ns.tprintf("alias go=\"run alias.js\";");
+  ns.tprintf("alias go=\"home; run alias.js\";");
 }
