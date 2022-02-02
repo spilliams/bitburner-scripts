@@ -1,6 +1,6 @@
 /** @param {NS} ns **/
 export async function main(ns) {
-  if (ns.args.length > 0) return await goto(ns, ns.args[0]);
+  if (ns.args.length > 0) return await goto(ns, ns.args[0], true);
 
   const linkMap = await buildMap(ns);
   const keys = Object.keys(linkMap);
@@ -12,14 +12,14 @@ export async function main(ns) {
 }
 
 /** @param {NS} ns **/
-export async function goto(ns, hostname) {
+export async function goto(ns, hostname, debug = false) {
   const linkMap = await buildMap(ns);
   if (typeof linkMap[hostname] == "undefined") throw ns.sprintf("can't go to %s: it's not in my link map. Typo?", hostname);
 
   const path = linkMap[hostname];
   for (let i = 0; i < path.length; i++) {
     if (ns.connect(path[i])) {
-      ns.tprintf("Connected to %s", path[i]);
+      if (debug) ns.tprintf("Connected to %s", path[i]);
     } else {
       throw ns.sprintf("can't connect to %s (path %s)", path[i], path.join(" > "));
     }
