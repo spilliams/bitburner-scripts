@@ -1,10 +1,10 @@
 digraph dep {
-  subgraph cluster_0 {
-    label="2.js"
-    "2.js/main" [label="main"]
-    "2.js/formatMoney" [label="formatMoney"]
-    "2.js/main" -> "2.js/formatMoney"
-  }
+  // subgraph cluster_0 {
+  //   label="2.js"
+  //   "2.js/main" [label="main"]
+  //   "2.js/formatMoney" [label="formatMoney"]
+  //   "2.js/main" -> "2.js/formatMoney"
+  // }
 
   // subgraph cluster_1 {
   //   label="3.js"
@@ -51,20 +51,28 @@ digraph dep {
     "bootstrap.js/main" -> "bootstrap.js/study"
     "bootstrap.js/main" -> "bootstrap.js/reorchestrate"
   }
+  "bootstrap.js/main" -> "dark.js/main" [style=dashed]
+  "bootstrap.js/main" -> "buy-upgrade.js/main" [style=dashed]
+  "bootstrap.js/main" -> "write-programs.js/main" [style=dashed]
+  "bootstrap.js/main" -> "backdoor.js/main" [style=dashed]
+  "bootstrap.js/reorchestrate" -> "target.js/topTargets"
+  "bootstrap.js/reorchestrate" -> "orch.js/main" [style=dashed]
+  "bootstrap.js/reorchestrate" -> "porch.js/main" [style=dashed]
+  "bootstrap.js/reorchestrate" -> "4.js/main" [style=dashed]
 
   subgraph cluster_7 {
-    label="buy_upgrade.js"
+    label="buy-upgrade.js"
 
-    "buy_upgrade.js/main" [label="main"]
-    "buy_upgrade.js/buyServer" [label="buyServer"]
-    "buy_upgrade.js/upgradeServer" [label="upgradeServer"]
-    "buy_upgrade.js/runPayload" [label="runPayload", style=bold, color=red]
-    "buy_upgrade.js/runPayloadBots" [label="runPayloadBots"]
+    "buy-upgrade.js/main" [label="main"]
+    "buy-upgrade.js/buyServer" [label="buyServer"]
+    "buy-upgrade.js/upgradeServer" [label="upgradeServer"]
+    "buy-upgrade.js/runPayload" [label="runPayload", style=bold, color=red]
+    "buy-upgrade.js/runPayloadBots" [label="runPayloadBots"]
 
-    "buy_upgrade.js/main" -> "buy_upgrade.js/buyServer" -> "buy_upgrade.js/runPayload" -> "buy_upgrade.js/runPayloadBots"
-    "buy_upgrade.js/main" -> "buy_upgrade.js/upgradeServer" -> "buy_upgrade.js/runPayload"
+    "buy-upgrade.js/main" -> "buy-upgrade.js/buyServer" -> "buy-upgrade.js/runPayload" -> "buy-upgrade.js/runPayloadBots"
+    "buy-upgrade.js/main" -> "buy-upgrade.js/upgradeServer" -> "buy-upgrade.js/runPayload"
   }
-  "buy_upgrade.js/upgradeServer" -> "util_format.js/formatMem"
+  "buy-upgrade.js/upgradeServer" -> "util_format.js/formatMem"
 
   subgraph cluster_23 {
     label="cmd.js"
@@ -136,8 +144,6 @@ digraph dep {
   "info.js/main" -> "util_format.js/pad"
   "info.js/main" -> "target.js/getNumPortScriptsAvailable"
 
-  // todo continue with sync from here
-
   subgraph cluster_17 {
     label="kill.js"
     "kill.js/main" [label="main"]
@@ -168,7 +174,6 @@ digraph dep {
     "orch.js/hackTarget" [label="hackTarget"]
     "orch.js/runBatch" [label="runBatch"]
     "orch.js/targetPrepared" [label="targetPrepared"]
-    "orch.js/pad" [label="pad", style=bold, color=blue]
 
     "orch.js/main" -> "orch.js/orchestrate"
     "orch.js/orchestrate" -> "orch.js/targetValid"
@@ -178,13 +183,40 @@ digraph dep {
     "orch.js/prepareTarget" -> "orch.js/targetPrepared"
     "orch.js/prepareTarget" -> "orch.js/runBatch"
     "orch.js/hackTarget" -> "orch.js/runBatch"
-    "orch.js/setupHelperPool" -> "orch.js/takeIt" -> "orch.js/pad"
+    "orch.js/setupHelperPool" -> "orch.js/takeIt"
   }
   "orch.js/targetValid" -> "target.js/getNumPortScriptsAvailable"
   "orch.js/targetValid" -> "infect.js/breakIt"
   "orch.js/setupHelperPool" -> "infect.js/breakIt"
   "orch.js/orchestrate" -> "util_recurse.js/scanAll"
   "orch.js/runBatch" -> "util_format.js/formatNow"
+  "orch.js/takeIt" -> "util_format.js/pad"
+
+  subgraph cluster_20 {
+    label="porch.js"
+    "porch.js/main" [label="main"]
+  }
+  "porch.js/main" -> "orch.js/orchestrate"
+
+  subgraph cluster_25 {
+    label="portClear.js"
+    "portClear.js/main" [label="main"]
+  }
+
+  subgraph cluster_26 {
+    label="portPeek.js"
+    "portPeek.js/main" [label="main"]
+  }
+
+  subgraph cluster_27 {
+    label="portWrite.js"
+    "portWrite.js/main" [label="main"]
+  }
+
+  subgraph cluster_21 {
+    label="share.js"
+    "share.js/main" [label="main"]
+  }
 
   subgraph cluster_15 {
     label="target.js"
@@ -207,17 +239,7 @@ digraph dep {
     "target.js/main" -> "target.js/printUnhackable"
   }
   "target.js/main" -> "util_recurse.js/scanAll"
-
-  subgraph cluster_20 {
-    label="porch.js"
-    "porch.js/main" [label="main"]
-  }
-  "porch.js/main" -> "orch.js/orchestrate"
-
-  subgraph cluster_21 {
-    label="share.js"
-    "share.js/main" [label="main"]
-  }
+  "target.js/printHackable" -> "util_format.js/formatMoney"
 
   subgraph cluster_4 {
     label="util_format.js"
@@ -227,6 +249,7 @@ digraph dep {
     "util_format.js/formatMem" [label="formatMem"]
     "util_format.js/formatNow" [label="formatNow"]
     "util_format.js/formatTime" [label="formatTime"]
+    "util_format.js/pad" [label="pad"]
 
     "util_format.js/formatNow" -> "util_format.js/formatTime"
   }
@@ -238,6 +261,15 @@ digraph dep {
     "util_recurse.js/scanAll" [label="scanAll"]
 
     "util_recurse.js/main" -> "util_recurse.js/scanAll"
+  }
+
+  subgraph cluster_28 {
+    label="write-programs.js"
+
+    "write-programs.js/main" [label="main"]
+    "write-programs.js/study" [label="study"]
+
+    "write-programs.js/main" -> "write-programs.js/study"
   }
 
 }

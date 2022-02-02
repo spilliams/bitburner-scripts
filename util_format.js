@@ -34,3 +34,9 @@ export function formatMoney(dollars) {
   }
   return "$" + left.toFixed(3) + suffixes[suffix];
 }
+
+export function pad(num, len, char = " ") {
+  let str = "" + num;
+  while (str.length < len) str = char + str;
+  return str;
+}
